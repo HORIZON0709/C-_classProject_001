@@ -37,6 +37,10 @@ const int SCREEN_HEIGHT = 720;
 //頂点フォーマット
 const DWORD FVF_VERTEX_2D = (D3DFVF_XYZRHW | D3DFVF_DIFFUSE);
 
+/* 自分で追加したもの */
+//回転スピード
+const float ROTATION_SPEED = 10.0f;
+
 //*****************************************************************************
 //構造体定義
 //*****************************************************************************
@@ -79,7 +83,6 @@ LPDIRECT3DVERTEXBUFFER9 g_pVtxBuff = nullptr;
 //頂点情報
 VERTEX_2D g_aVertex[4];
 
-
 #ifdef _DEBUG
 //フォント
 LPD3DXFONT g_pFont = nullptr;
@@ -89,6 +92,13 @@ LPD3DXFONT g_pFont = nullptr;
 //FPSカウンタ
 int g_nCountFPS;
 #endif //_DEBUG
+
+/* 自分で追加したもの */
+D3DXVECTOR3 g_pos;	//位置
+D3DXVECTOR3 g_rot;	//向き
+float g_fLength;	//対角線の長さ
+float g_fAngle;		//対角線の角度
+float g_fSize;		//サイズ
 
 //=============================================================================
 //メイン関数
@@ -266,16 +276,16 @@ HRESULT Init(HWND hWnd, bool bWindow)
 	}
 
 	//デバイスのプレゼンテーションパラメータの設定
-	ZeroMemory(&d3dpp, sizeof(d3dpp));								//ワークをゼロクリア
-	d3dpp.BackBufferCount = 1;							//バックバッファの数
-	d3dpp.BackBufferWidth = SCREEN_WIDTH;				//ゲーム画面サイズ(幅)
-	d3dpp.BackBufferHeight = SCREEN_HEIGHT;				//ゲーム画面サイズ(高さ)
-	d3dpp.BackBufferFormat = d3ddm.Format;				//カラーモードの指定
+	ZeroMemory(&d3dpp, sizeof(d3dpp));				//ワークをゼロクリア
+	d3dpp.BackBufferCount = 1;						//バックバッファの数
+	d3dpp.BackBufferWidth = SCREEN_WIDTH;			//ゲーム画面サイズ(幅)
+	d3dpp.BackBufferHeight = SCREEN_HEIGHT;			//ゲーム画面サイズ(高さ)
+	d3dpp.BackBufferFormat = d3ddm.Format;			//カラーモードの指定
 	d3dpp.SwapEffect = D3DSWAPEFFECT_DISCARD;		//映像信号に同期してフリップする
-	d3dpp.EnableAutoDepthStencil = TRUE;						//デプスバッファ（Ｚバッファ）とステンシルバッファを作成
-	d3dpp.AutoDepthStencilFormat = D3DFMT_D16;					//デプスバッファとして16bitを使う
+	d3dpp.EnableAutoDepthStencil = TRUE;			//デプスバッファ（Ｚバッファ）とステンシルバッファを作成
+	d3dpp.AutoDepthStencilFormat = D3DFMT_D16;		//デプスバッファとして16bitを使う
 	d3dpp.Windowed = bWindow;						//ウィンドウモード
-	d3dpp.FullScreen_RefreshRateInHz = D3DPRESENT_RATE_DEFAULT;		//リフレッシュレート
+	d3dpp.FullScreen_RefreshRateInHz = D3DPRESENT_RATE_DEFAULT;	//リフレッシュレート
 	d3dpp.PresentationInterval = D3DPRESENT_INTERVAL_DEFAULT;	//インターバル
 
 	//ディスプレイアダプタを表すためのデバイスを作成
@@ -396,6 +406,21 @@ void Draw()
 //=============================================================================
 HRESULT InitPolygon()
 {
+	//位置
+	g_pos = D3DXVECTOR3((SCREEN_WIDTH * 0.5f), (SCREEN_HEIGHT * 0.5f), 0.0f);
+
+	//向き
+	g_rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+
+	//サイズ
+	g_fSize = 100.0f;
+
+	//対角線の長さを算出する
+	g_fLength = sqrtf((g_fSize * g_fSize) + (g_fSize * g_fSize)) * 0.5f;
+
+	//対角線の角度を算出する
+	g_fAngle = atan2f(g_fSize, g_fSize);
+
 	//頂点バッファの生成
 	g_pD3DDevice->CreateVertexBuffer(sizeof(VERTEX_2D) * 4,
 								D3DUSAGE_WRITEONLY,
@@ -409,14 +434,22 @@ HRESULT InitPolygon()
 	//頂点バッファをロックし、頂点情報へのポインタを取得
 	g_pVtxBuff->Lock(0, 0, (void**)&pVtx, 0);
 
-	D3DXVECTOR3 pos = D3DXVECTOR3((SCREEN_WIDTH * 0.5f), (SCREEN_HEIGHT * 0.5f), 0.0f);
-	const float POLYGON_SIZE = 25.0f;
-
 	//頂点情報を設定
-	pVtx[0].pos = D3DXVECTOR3(pos.x - POLYGON_SIZE, pos.y - POLYGON_SIZE, 0.0f);
-	pVtx[1].pos = D3DXVECTOR3(pos.x + POLYGON_SIZE, pos.y - POLYGON_SIZE, 0.0f);
-	pVtx[2].pos = D3DXVECTOR3(pos.x - POLYGON_SIZE, pos.y + POLYGON_SIZE, 0.0f);
-	pVtx[3].pos = D3DXVECTOR3(pos.x + POLYGON_SIZE, pos.y + POLYGON_SIZE, 0.0f);
+	pVtx[0].pos.x = g_pos.x + sinf(g_rot.z + (g_fAngle * -3.0f)) * g_fLength;
+	pVtx[0].pos.y = g_pos.y + cosf(g_rot.z + (g_fAngle * -3.0f)) * g_fLength;
+	pVtx[0].pos.z = 0.0f;
+
+	pVtx[1].pos.x = g_pos.x + sinf(g_rot.z + (g_fAngle * 3.0f)) * g_fLength;
+	pVtx[1].pos.y = g_pos.y + cosf(g_rot.z + (g_fAngle * 3.0f)) * g_fLength;
+	pVtx[1].pos.z = 0.0f;
+
+	pVtx[2].pos.x = g_pos.x + sinf(g_rot.z + (g_fAngle * -1.0f)) * g_fLength;
+	pVtx[2].pos.y = g_pos.y + cosf(g_rot.z + (g_fAngle * -1.0f)) * g_fLength;
+	pVtx[2].pos.z = 0.0f;
+
+	pVtx[3].pos.x = g_pos.x + sinf(g_rot.z + g_fAngle) * g_fLength;
+	pVtx[3].pos.y = g_pos.y + cosf(g_rot.z + g_fAngle) * g_fLength;
+	pVtx[3].pos.z = 0.0f;
 
 	//rhwの設定
 	pVtx[0].rhw = 1.0f;
@@ -445,7 +478,7 @@ void UninitPolygon()
 	if (g_pVtxBuff != nullptr)
 	{
 		g_pVtxBuff->Release();
-		g_pVtxBuff = NULL;
+		g_pVtxBuff = nullptr;
 	}
 }
 
@@ -454,6 +487,45 @@ void UninitPolygon()
 //=============================================================================
 void UpdatePolygon()
 {
+	g_rot.z -= ROTATION_SPEED;	//回転
+
+	/* 角度の正規化 */
+	if (g_rot.z >= D3DX_PI)
+	{// 3.14より大きい
+		g_rot.z -= D3DX_PI * 2.0f;
+	}
+	else if (g_rot.z <= -D3DX_PI)
+	{// -3.14より小さい
+		g_rot.z += D3DX_PI * 2.0f;
+	}
+
+	//サイズの拡大・縮小
+	g_fSize += sinf(g_rot.z);
+
+	//対角線の長さを再計算
+	g_fLength = sqrtf((g_fSize * g_fSize) + (g_fSize * g_fSize)) * 0.5f;
+
+	VERTEX_2D *pVtx;	//頂点情報へのポインタ
+
+	//頂点バッファをロックし、頂点情報へのポインタを取得
+	g_pVtxBuff->Lock(0, 0, (void**)&pVtx, 0);
+
+	//頂点座標の更新
+	pVtx[0].pos.x = g_pos.x + sinf(g_rot.z + (g_fAngle * -3.0f)) * g_fLength;
+	pVtx[0].pos.y = g_pos.y + cosf(g_rot.z + (g_fAngle * -3.0f)) * g_fLength;
+	pVtx[0].pos.z = 0.0f;
+
+	pVtx[1].pos.x = g_pos.x + sinf(g_rot.z + (g_fAngle * 3.0f)) * g_fLength;
+	pVtx[1].pos.y = g_pos.y + cosf(g_rot.z + (g_fAngle * 3.0f)) * g_fLength;
+	pVtx[1].pos.z = 0.0f;
+
+	pVtx[2].pos.x = g_pos.x + sinf(g_rot.z + (g_fAngle * -1.0f)) * g_fLength;
+	pVtx[2].pos.y = g_pos.y + cosf(g_rot.z + (g_fAngle * -1.0f)) * g_fLength;
+	pVtx[2].pos.z = 0.0f;
+
+	pVtx[3].pos.x = g_pos.x + sinf(g_rot.z + g_fAngle) * g_fLength;
+	pVtx[3].pos.y = g_pos.y + cosf(g_rot.z + g_fAngle) * g_fLength;
+	pVtx[3].pos.z = 0.0f;
 }
 
 //=============================================================================
