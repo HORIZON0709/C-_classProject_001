@@ -468,11 +468,6 @@ void DrawPolygon()
 	g_pD3DDevice->SetFVF(FVF_VERTEX_2D);
 
 	//ポリゴンの描画
-	//g_pD3DDevice->DrawPrimitiveUP(D3DPT_TRIANGLESTRIP,	//プリミティブの種類
-	//								2,					//プリミティブ(ポリゴン)の数
-	//								g_aVertex,			//頂点情報の先頭アドレス
-	//								sizeof(VERTEX_2D));	//頂点情報構造体のサイズ
-
 	g_pD3DDevice->DrawPrimitive(D3DPT_TRIANGLESTRIP,	//プリミティブの種類
 								0,						//描画する最初の頂点インデックス
 								2);						//描画するプリミティブ数
