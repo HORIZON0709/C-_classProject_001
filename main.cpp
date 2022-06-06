@@ -28,7 +28,9 @@ CRenderer* pRenderer = nullptr;	//レンダラーのポインタ
 //***************************
 //静的メンバ変数
 //***************************
+#ifdef _DEBUG
 int CRenderer::m_nCountFPS = 0;	//FPSカウンタ
+#endif //_DEBUG
 
 //=============================================================================
 //メイン関数
@@ -54,7 +56,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPSTR /*lpC
 	//ウィンドウクラスの登録
 	RegisterClassEx(&wcex);
 
-	CRenderer renderer;	//レンダラー
+	CRenderer renderer;	//レンダラー(実体)
 
 	RECT rect = { 0, 0, renderer.SCREEN_WIDTH, renderer.SCREEN_HEIGHT };
 	//指定したクライアント領域を確保するために必要なウィンドウ座標を計算
