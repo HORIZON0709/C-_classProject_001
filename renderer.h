@@ -22,7 +22,7 @@
 #include <d3dx9.h>
 
 //***************************
-//レンダラークラスの定義
+//レンダリングクラスの定義
 //***************************
 class CRenderer
 {/* 基本クラス */
@@ -41,6 +41,7 @@ public: /* 定数の定義 */
 private:
 	/* 自分で追加したもの */
 	const float ROTATION_SPEED = 0.05f;	//回転スピード
+	const float POLYGON_SIZE = 100.0f;	//サイズ
 
 public: /* コンストラクタ・デストラクタ */
 	CRenderer();
@@ -58,11 +59,6 @@ private:
 	void DrawPolygon();		//ポリゴンの描画
 	void DrawFPS();			//FPSの描画
 
-public: /* 静的メンバ変数 */
-#ifdef _DEBUG
-	static int m_nCountFPS;	//FPSカウンタ
-#endif //_DEBUG
-
 private: /* メンバ変数 */
 	LPDIRECT3D9 m_pD3D;					//Direct3Dオブジェクト
 	LPDIRECT3DDEVICE9 m_pD3DDevice;		//Deviceオブジェクト
@@ -73,6 +69,7 @@ private: /* メンバ変数 */
 	float m_fLength;					//対角線の長さ
 	float m_fAngle;						//対角線の角度
 	float m_fSize;						//サイズ
+	float m_fCol;						//色
 	LPD3DXFONT m_pFont;					//フォント
 };
 

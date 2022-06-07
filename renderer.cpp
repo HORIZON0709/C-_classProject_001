@@ -5,6 +5,7 @@
 //
 //================================================
 #include "renderer.h"
+#include "main.h"
 
 //================================================
 //コンストラクタ
@@ -21,6 +22,7 @@ CRenderer::CRenderer()
 	m_fLength = 0.0f;
 	m_fAngle = 0.0f;
 	m_fSize = 0.0f;
+	m_fCol = 0.0f;
 	m_pFont = nullptr;
 }
 
@@ -191,7 +193,7 @@ HRESULT CRenderer::InitPolygon()
 	m_rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 
 	//サイズ
-	m_fSize = 100.0f;
+	m_fSize = POLYGON_SIZE;
 
 	//対角線の長さを算出する
 	m_fLength = sqrtf((m_fSize * m_fSize) + (m_fSize * m_fSize)) * 0.5f;
@@ -304,6 +306,19 @@ void CRenderer::UpdatePolygon()
 	pVtx[3].pos.x = m_pos.x + sinf(m_rot.z + m_fAngle) * m_fLength;
 	pVtx[3].pos.y = m_pos.y + cosf(m_rot.z + m_fAngle) * m_fLength;
 	pVtx[3].pos.z = 0.0f;
+
+	/* ↓色で遊んだ↓ */
+
+	m_fCol += 0.1f;
+
+	//頂点カラーの設定
+	pVtx[0].col = D3DXCOLOR(cosf(m_fCol * 0.7f), cosf(m_fCol * 0.2f), cosf(m_fCol * 0.9f), 1.0f);
+	pVtx[1].col = D3DXCOLOR(cosf(m_fCol * 0.3f), cosf(m_fCol * 0.4f), cosf(m_fCol * 0.7f), 1.0f);
+	pVtx[2].col = D3DXCOLOR(cosf(m_fCol * 0.9f), cosf(m_fCol * 0.6f), cosf(m_fCol * 0.5f), 1.0f);
+	pVtx[3].col = D3DXCOLOR(cosf(m_fCol * 1.0f), cosf(m_fCol * 0.8f), cosf(m_fCol * 0.3f), 1.0f);
+
+	//頂点バッファをアンロックする
+	m_pVtxBuff->Unlock();
 }
 
 //================================================
@@ -332,7 +347,7 @@ void CRenderer::DrawFPS()
 	RECT rect = { 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT };
 	TCHAR str[256];
 
-	wsprintf(str, _T("FPS : %d\n"), m_nCountFPS);
+	wsprintf(str, _T("FPS : %d\n"), GetFPS());
 
 	//テキスト描画
 	m_pFont->DrawText(NULL, str, -1, &rect, DT_LEFT, D3DCOLOR_ARGB(0xff, 0xff, 0xff, 0xff));
