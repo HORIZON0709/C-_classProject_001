@@ -4,8 +4,12 @@
 //Author : 
 //
 //=============================================================================
-
+//***************************
+//インクルード
+//***************************
+#include "main.h"
 #include "renderer.h"
+#include "object.h"
 
 //***************************
 //定数定義
@@ -23,14 +27,14 @@ LPCTSTR WINDOW_NAME = _T("ポリゴンの描画");
 //*****************************************************************************
 LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
-CRenderer* pRenderer = nullptr;	//レンダリングのポインタ
-
 //***************************
 //スタティック変数
 //***************************
 namespace
 {
 int s_nCountFPS;	//FPSカウンタ
+CRenderer* s_pRenderer = nullptr;	//レンダリングのポインタ
+CObject* s_pObject = nullptr;		//オブジェクトのポインタ
 }//namespaceはここまで
 
 //=============================================================================
@@ -57,7 +61,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPSTR /*lpC
 	//ウィンドウクラスの登録
 	RegisterClassEx(&wcex);
 
-	RECT rect = { 0, 0, CRenderer::SCREEN_WIDTH, CRenderer::SCREEN_HEIGHT };
+	RECT rect = { 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT };
 	//指定したクライアント領域を確保するために必要なウィンドウ座標を計算
 	AdjustWindowRect(&rect, WS_OVERLAPPEDWINDOW, FALSE);
 
@@ -74,16 +78,23 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPSTR /*lpC
 		hInstance,
 		NULL);
 
-	if (pRenderer == nullptr)
+	if (s_pRenderer == nullptr)
 	{//NULLチェック
-		pRenderer = new CRenderer;	//メモリの動的確保
+		s_pRenderer = new CRenderer;	//メモリの動的確保
+	}
+
+	if (s_pObject == nullptr)
+	{//NULLチェック
+		s_pObject = new CObject;	//メモリの動的確保
 	}
 
 	//初期化処理
-	if (FAILED(pRenderer->Init(hWnd, TRUE)))
+	if (FAILED(s_pRenderer->Init(hWnd, TRUE)))
 	{//初期化処理が失敗した場合
 		return -1;
 	}
+
+	s_pObject->Init();	//オブジェクトの初期化
 
 	//分解能を設定
 	timeBeginPeriod(1);
@@ -137,10 +148,10 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPSTR /*lpC
 				dwExecLastTime = dwCurrentTime;
 
 				//更新処理
-				pRenderer->Update();
+				s_pRenderer->Update();
 
 				//描画処理
-				pRenderer->Draw();
+				s_pRenderer->Draw();
 
 #ifdef _DEBUG
 				dwFrameCount++;
@@ -149,11 +160,18 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPSTR /*lpC
 		}
 	}
 
-	if (pRenderer != nullptr)
+	if (s_pRenderer != nullptr)
 	{//NULLチェック
-		pRenderer->Uninit();	//終了処理
-		delete pRenderer;		//メモリの解放
-		pRenderer = nullptr;	//nullptrにする
+		s_pRenderer->Uninit();	//終了処理
+		delete s_pRenderer;		//メモリの解放
+		s_pRenderer = nullptr;	//nullptrにする
+	}
+
+	if (s_pObject != nullptr)
+	{//NULLチェック
+		s_pObject->Uninit();	//終了処理
+		delete s_pObject;		//メモリの解放
+		s_pObject = nullptr;	//nullptrにする
 	}
 
 	//ウィンドウクラスの登録を解除
@@ -202,4 +220,20 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 int GetFPS()
 {
 	return s_nCountFPS;
+}
+
+//================================================
+//レンダリングの取得
+//================================================
+CRenderer* GetRenderer()
+{
+	return s_pRenderer;
+}
+
+//================================================
+//オブジェクトの取得
+//================================================
+CObject* GetObjects()
+{
+	return s_pObject;
 }
