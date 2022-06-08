@@ -8,17 +8,20 @@
 //インクルード
 //***************************
 #include "renderer.h"
-#include "object.h"
+#include "object2D.h"
+
+#include <assert.h>
 
 //================================================
 //コンストラクタ
 //================================================
-CRenderer::CRenderer()
+CRenderer::CRenderer() : 
+#ifdef _DEBUG
+	m_pFont(nullptr),
+#endif //_DEBUG
+	m_pD3D(nullptr),
+	m_pD3DDevice(nullptr)
 {
-	//メンバ変数のクリア
-	m_pD3D = nullptr;
-	m_pD3DDevice = nullptr;
-	m_pFont = nullptr;
 }
 
 //================================================
@@ -26,7 +29,13 @@ CRenderer::CRenderer()
 //================================================
 CRenderer::~CRenderer()
 {
-	/* 処理無し */
+	/* 解放漏れの確認 */
+	assert(m_pD3D == nullptr);
+	assert(m_pD3DDevice == nullptr);
+
+#ifdef _DEBUG
+	assert(m_pFont == nullptr);
+#endif //_DEBUG
 }
 
 //================================================
@@ -137,7 +146,10 @@ void CRenderer::Uninit()
 //================================================
 void CRenderer::Update()
 {
-	GetObjects()->Update();
+	for (int i = 0; i < CObject2D::MAX_POLYGON; i++)
+	{
+		GetObjects(i)->Update();	//オブジェクト
+	}
 }
 
 //================================================
@@ -153,7 +165,10 @@ void CRenderer::Draw()
 	//Direct3Dによる描画の開始
 	if (SUCCEEDED(m_pD3DDevice->BeginScene()))
 	{
-		GetObjects()->Draw();
+		for (int i = 0; i < CObject2D::MAX_POLYGON; i++)
+		{
+			GetObjects(i)->Draw();	//オブジェクト
+		}
 
 #ifdef _DEBUG
 		//FPS表示

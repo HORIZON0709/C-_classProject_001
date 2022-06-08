@@ -10,20 +10,21 @@
 #include "object2D.h"
 #include "renderer.h"
 
+#include <assert.h>
+
 //================================================
 //コンストラクタ
 //================================================
-CObject2D::CObject2D()
+CObject2D::CObject2D() : 
+	m_pTexture(nullptr),
+	m_pVtxBuff(nullptr),
+	m_pos(D3DXVECTOR3(0.0f, 0.0f, 0.0f)),
+	m_rot(D3DXVECTOR3(0.0f, 0.0f, 0.0f)), 
+	m_fLength(0.0f), 
+	m_fAngle(0.0f), 
+	m_fSize(0.0f),
+	m_fCol(0.0f)
 {
-	//メンバ変数のクリア
-	m_pTexture = nullptr;
-	m_pVtxBuff = nullptr;
-	m_pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	m_rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	m_fLength = 0.0f;
-	m_fAngle = 0.0f;
-	m_fSize = 0.0f;
-	m_fCol = 0.0f;
 }
 
 //================================================
@@ -31,7 +32,9 @@ CObject2D::CObject2D()
 //================================================
 CObject2D::~CObject2D()
 {
-	/* 処理無し */
+	/* 解放漏れの確認 */
+	assert(m_pTexture == nullptr);
+	assert(m_pVtxBuff == nullptr);
 }
 
 //================================================
@@ -43,8 +46,7 @@ HRESULT CObject2D::Init()
 	LPDIRECT3DDEVICE9 pDevice = GetRenderer()->GetDevice();
 
 	//位置
-	//m_pos = D3DXVECTOR3((SCREEN_WIDTH * 0.5f), (SCREEN_HEIGHT * 0.5f), 0.0f);
-	m_pos = D3DXVECTOR3(600.0f, 300.0f, 0.0f);
+	m_pos = D3DXVECTOR3((SCREEN_WIDTH * 0.5f), (SCREEN_HEIGHT * 0.5f), 0.0f);
 
 	//向き
 	m_rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
@@ -196,4 +198,20 @@ void CObject2D::Draw()
 	pDevice->DrawPrimitive(D3DPT_TRIANGLESTRIP,	//プリミティブの種類
 							0,					//描画する最初の頂点インデックス
 							2);					//描画するプリミティブ数
+}
+
+//================================================
+//位置を設定
+//================================================
+void CObject2D::SetPos(const D3DXVECTOR3 &pos)
+{
+	m_pos = pos;
+}
+
+//================================================
+//位置を取得
+//================================================
+D3DXVECTOR3 CObject2D::GetPos()
+{
+	return m_pos;
 }

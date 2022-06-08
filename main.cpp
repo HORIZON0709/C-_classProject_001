@@ -11,6 +11,8 @@
 #include "renderer.h"
 #include "object2D.h"
 
+#include <assert.h>
+
 //***************************
 //定数定義
 //***************************
@@ -33,8 +35,8 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 namespace
 {
 int s_nCountFPS;	//FPSカウンタ
-CRenderer* s_pRenderer = nullptr;	//レンダリングのポインタ
-CObject* s_pObject = nullptr;		//オブジェクトのポインタ
+CRenderer* s_pRenderer = nullptr;					//レンダリングのポインタ
+CObject* s_pObject[CObject2D::MAX_POLYGON] = {};	//オブジェクトのポインタ
 }//namespaceはここまで
 
 //=============================================================================
@@ -83,9 +85,16 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPSTR /*lpC
 		s_pRenderer = new CRenderer;	//メモリの動的確保
 	}
 
-	if (s_pObject == nullptr)
-	{//NULLチェック
-		s_pObject = new CObject2D;	//メモリの動的確保
+	for (int i = 0; i < CObject2D::MAX_POLYGON; i++)
+	{
+		if (s_pObject[i] != nullptr)
+		{//NULLチェック
+			continue;
+		}
+
+		/* nullptrの場合 */
+
+		s_pObject[i] = new CObject2D;	//メモリの動的確保
 	}
 
 	//初期化処理
@@ -95,9 +104,16 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPSTR /*lpC
 	}
 
 	//オブジェクトの初期化
-	if (FAILED(s_pObject->Init()))
-	{//初期化処理が失敗した場合
-		return -1;
+	for (int i = 0; i < CObject2D::MAX_POLYGON; i++)
+	{
+		if (FAILED(s_pObject[i]->Init()))
+		{//初期化処理が失敗した場合
+			assert(false);
+			return -1;
+		}
+
+		D3DXVECTOR3 pos = D3DXVECTOR3((SCREEN_WIDTH * (0.1f * (i + 1))), (SCREEN_HEIGHT * 0.1f), 0.0f);
+		s_pObject[i]->SetPos(pos);
 	}
 
 	//分解能を設定
@@ -164,11 +180,14 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPSTR /*lpC
 		}
 	}
 
-	if (s_pObject != nullptr)
-	{//NULLチェック
-		s_pObject->Uninit();	//終了処理
-		delete s_pObject;		//メモリの解放
-		s_pObject = nullptr;	//nullptrにする
+	for (int i = 0; i < CObject2D::MAX_POLYGON; i++)
+	{
+		if (s_pObject[i] != nullptr)
+		{//NULLチェック
+			s_pObject[i]->Uninit();	//終了処理
+			delete s_pObject[i];	//メモリの解放
+			s_pObject[i] = nullptr;	//nullptrにする
+		}
 	}
 
 	if (s_pRenderer != nullptr)
@@ -237,7 +256,8 @@ CRenderer* GetRenderer()
 //================================================
 //オブジェクト情報の取得
 //================================================
-CObject* GetObjects()
+CObject* GetObjects(int nIdx)
 {
-	return s_pObject;
+	assert(nIdx >= 0 && nIdx < CObject2D::MAX_POLYGON);
+	return s_pObject[nIdx];
 }
