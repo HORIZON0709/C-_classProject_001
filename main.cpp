@@ -7,7 +7,6 @@
 //***************************
 //インクルード
 //***************************
-#include "main.h"
 #include "renderer.h"
 #include "object2D.h"
 
@@ -36,7 +35,7 @@ namespace
 {
 int s_nCountFPS;	//FPSカウンタ
 CRenderer* s_pRenderer = nullptr;					//レンダリングのポインタ
-CObject* s_pObject[CObject2D::MAX_POLYGON] = {};	//オブジェクトのポインタ
+CObject* s_apObject[CObject2D::MAX_POLYGON] = {};	//オブジェクトのポインタ
 }//namespaceはここまで
 
 //=============================================================================
@@ -87,14 +86,14 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPSTR /*lpC
 
 	for (int i = 0; i < CObject2D::MAX_POLYGON; i++)
 	{
-		if (s_pObject[i] != nullptr)
+		if (s_apObject[i] != nullptr)
 		{//NULLチェック
 			continue;
 		}
 
 		/* nullptrの場合 */
 
-		s_pObject[i] = new CObject2D;	//メモリの動的確保
+		s_apObject[i] = new CObject2D;	//メモリの動的確保
 	}
 
 	//初期化処理
@@ -106,14 +105,14 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPSTR /*lpC
 	//オブジェクトの初期化
 	for (int i = 0; i < CObject2D::MAX_POLYGON; i++)
 	{
-		if (FAILED(s_pObject[i]->Init()))
+		if (FAILED(s_apObject[i]->Init()))
 		{//初期化処理が失敗した場合
 			assert(false);
 			return -1;
 		}
 
 		D3DXVECTOR3 pos = D3DXVECTOR3((SCREEN_WIDTH * (0.1f * (i + 1))), (SCREEN_HEIGHT * 0.1f), 0.0f);
-		s_pObject[i]->SetPos(pos);
+		s_apObject[i]->SetPos(pos);
 	}
 
 	//分解能を設定
@@ -182,11 +181,11 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPSTR /*lpC
 
 	for (int i = 0; i < CObject2D::MAX_POLYGON; i++)
 	{
-		if (s_pObject[i] != nullptr)
+		if (s_apObject[i] != nullptr)
 		{//NULLチェック
-			s_pObject[i]->Uninit();	//終了処理
-			delete s_pObject[i];	//メモリの解放
-			s_pObject[i] = nullptr;	//nullptrにする
+			s_apObject[i]->Uninit();	//終了処理
+			delete s_apObject[i];	//メモリの解放
+			s_apObject[i] = nullptr;	//nullptrにする
 		}
 	}
 
@@ -256,8 +255,7 @@ CRenderer* GetRenderer()
 //================================================
 //オブジェクト情報の取得
 //================================================
-CObject* GetObjects(int nIdx)
+CObject** GetObjects()
 {
-	assert(nIdx >= 0 && nIdx < CObject2D::MAX_POLYGON);
-	return s_pObject[nIdx];
+	return &s_apObject[0];
 }

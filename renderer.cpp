@@ -148,7 +148,7 @@ void CRenderer::Update()
 {
 	for (int i = 0; i < CObject2D::MAX_POLYGON; i++)
 	{
-		GetObjects(i)->Update();	//オブジェクト
+		GetObjects()[i]->Update();	//オブジェクト
 	}
 }
 
@@ -167,7 +167,7 @@ void CRenderer::Draw()
 	{
 		for (int i = 0; i < CObject2D::MAX_POLYGON; i++)
 		{
-			GetObjects(i)->Draw();	//オブジェクト
+			GetObjects()[i]->Draw();	//オブジェクト
 		}
 
 #ifdef _DEBUG
