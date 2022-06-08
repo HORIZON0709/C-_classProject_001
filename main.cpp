@@ -94,7 +94,11 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPSTR /*lpC
 		return -1;
 	}
 
-	s_pObject->Init();	//オブジェクトの初期化
+	//オブジェクトの初期化
+	if (FAILED(s_pObject->Init()))
+	{//初期化処理が失敗した場合
+		return -1;
+	}
 
 	//分解能を設定
 	timeBeginPeriod(1);
@@ -160,18 +164,18 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPSTR /*lpC
 		}
 	}
 
-	if (s_pRenderer != nullptr)
-	{//NULLチェック
-		s_pRenderer->Uninit();	//終了処理
-		delete s_pRenderer;		//メモリの解放
-		s_pRenderer = nullptr;	//nullptrにする
-	}
-
 	if (s_pObject != nullptr)
 	{//NULLチェック
 		s_pObject->Uninit();	//終了処理
 		delete s_pObject;		//メモリの解放
 		s_pObject = nullptr;	//nullptrにする
+	}
+
+	if (s_pRenderer != nullptr)
+	{//NULLチェック
+		s_pRenderer->Uninit();	//終了処理
+		delete s_pRenderer;		//メモリの解放
+		s_pRenderer = nullptr;	//nullptrにする
 	}
 
 	//ウィンドウクラスの登録を解除

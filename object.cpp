@@ -43,7 +43,8 @@ HRESULT CObject::Init()
 	LPDIRECT3DDEVICE9 pDevice = GetRenderer()->GetDevice();
 
 	//位置
-	m_pos = D3DXVECTOR3((SCREEN_WIDTH * 0.5f), (SCREEN_HEIGHT * 0.5f), 0.0f);
+	//m_pos = D3DXVECTOR3((SCREEN_WIDTH * 0.5f), (SCREEN_HEIGHT * 0.5f), 0.0f);
+	m_pos = D3DXVECTOR3(600.0f, 300.0f, 0.0f);
 
 	//向き
 	m_rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
@@ -71,12 +72,12 @@ HRESULT CObject::Init()
 	m_pVtxBuff->Lock(0, 0, (void**)&pVtx, 0);
 
 	//頂点情報を設定
-	pVtx[0].pos.x = m_pos.x + sinf(m_rot.z + (m_fAngle * -3.0f)) * m_fLength;
-	pVtx[0].pos.y = m_pos.y + cosf(m_rot.z + (m_fAngle * -3.0f)) * m_fLength;
+	pVtx[0].pos.x = m_pos.x + sinf(m_rot.z + (m_fAngle * -D3DX_PI)) * m_fLength;
+	pVtx[0].pos.y = m_pos.y + cosf(m_rot.z + (m_fAngle * -D3DX_PI)) * m_fLength;
 	pVtx[0].pos.z = 0.0f;
 
-	pVtx[1].pos.x = m_pos.x + sinf(m_rot.z + (m_fAngle * 3.0f)) * m_fLength;
-	pVtx[1].pos.y = m_pos.y + cosf(m_rot.z + (m_fAngle * 3.0f)) * m_fLength;
+	pVtx[1].pos.x = m_pos.x + sinf(m_rot.z + (m_fAngle * D3DX_PI)) * m_fLength;
+	pVtx[1].pos.y = m_pos.y + cosf(m_rot.z + (m_fAngle * D3DX_PI)) * m_fLength;
 	pVtx[1].pos.z = 0.0f;
 
 	pVtx[2].pos.x = m_pos.x + sinf(m_rot.z + (m_fAngle * -1.0f)) * m_fLength;
@@ -193,6 +194,6 @@ void CObject::Draw()
 
 	//ポリゴンの描画
 	pDevice->DrawPrimitive(D3DPT_TRIANGLESTRIP,	//プリミティブの種類
-								0,						//描画する最初の頂点インデックス
-								2);						//描画するプリミティブ数
+							0,					//描画する最初の頂点インデックス
+							2);					//描画するプリミティブ数
 }

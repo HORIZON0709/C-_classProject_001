@@ -153,6 +153,8 @@ void CRenderer::Draw()
 	//Direct3Dによる描画の開始
 	if (SUCCEEDED(m_pD3DDevice->BeginScene()))
 	{
+		GetObjects()->Draw();
+
 #ifdef _DEBUG
 		//FPS表示
 		DrawFPS();
@@ -164,8 +166,6 @@ void CRenderer::Draw()
 
 	//バックバッファとフロントバッファの入れ替え
 	m_pD3DDevice->Present(NULL, NULL, NULL, NULL);
-
-	GetObjects()->Draw();
 }
 
 #ifdef _DEBUG
