@@ -41,15 +41,8 @@ public: /* 純粋仮想関数 */
 	virtual void Update() = 0;	//更新
 	virtual void Draw() = 0;	//描画
 
-protected: /* メンバ変数 */
-	LPDIRECT3DTEXTURE9 m_pTexture;		//テクスチャへのポインタ
-	LPDIRECT3DVERTEXBUFFER9 m_pVtxBuff;	//頂点バッファへのポインタ
-	D3DXVECTOR3 m_pos;					//位置
-	D3DXVECTOR3 m_rot;					//向き
-	float m_fLength;					//対角線の長さ
-	float m_fAngle;						//対角線の角度
-	float m_fSize;						//サイズ
-	float m_fCol;						//色
+private: /* メンバ変数 */
+	
 };
 
 #endif

@@ -30,7 +30,14 @@ public: /* メンバ関数 */
 	void Draw()override;	//描画
 
 private: /* メンバ変数 */
-	
+	LPDIRECT3DTEXTURE9 m_pTexture;		//テクスチャへのポインタ
+	LPDIRECT3DVERTEXBUFFER9 m_pVtxBuff;	//頂点バッファへのポインタ
+	D3DXVECTOR3 m_pos;					//位置
+	D3DXVECTOR3 m_rot;					//向き
+	float m_fLength;					//対角線の長さ
+	float m_fAngle;						//対角線の角度
+	float m_fSize;						//サイズ
+	float m_fCol;						//色
 };
 
 #endif

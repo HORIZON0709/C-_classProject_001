@@ -15,7 +15,15 @@
 //================================================
 CObject2D::CObject2D()
 {
-	
+	//ÉÅÉìÉoïœêîÇÃÉNÉäÉA
+	m_pTexture = nullptr;
+	m_pVtxBuff = nullptr;
+	m_pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	m_rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	m_fLength = 0.0f;
+	m_fAngle = 0.0f;
+	m_fSize = 0.0f;
+	m_fCol = 0.0f;
 }
 
 //================================================
