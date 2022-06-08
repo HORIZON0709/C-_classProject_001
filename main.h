@@ -38,7 +38,11 @@ const int SCREEN_HEIGHT = 720;	//スクリーンの高さ
 //***************************
 /* FPSの取得 */
 int GetFPS();
+
+/* レンダリング情報の取得 */
 CRenderer* GetRenderer();
+
+/* オブジェクト情報の取得 */
 CObject* GetObjects();
 
 #endif

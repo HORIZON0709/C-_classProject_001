@@ -9,7 +9,7 @@
 //***************************
 #include "main.h"
 #include "renderer.h"
-#include "object.h"
+#include "object2D.h"
 
 //***************************
 //定数定義
@@ -85,7 +85,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPSTR /*lpC
 
 	if (s_pObject == nullptr)
 	{//NULLチェック
-		s_pObject = new CObject;	//メモリの動的確保
+		s_pObject = new CObject2D;	//メモリの動的確保
 	}
 
 	//初期化処理
@@ -227,7 +227,7 @@ int GetFPS()
 }
 
 //================================================
-//レンダリングの取得
+//レンダリング情報の取得
 //================================================
 CRenderer* GetRenderer()
 {
@@ -235,7 +235,7 @@ CRenderer* GetRenderer()
 }
 
 //================================================
-//オブジェクトの取得
+//オブジェクト情報の取得
 //================================================
 CObject* GetObjects()
 {

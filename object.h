@@ -28,21 +28,20 @@ public: /* 構造体の定義 */
 	};
 
 private: /* 定数の定義 */
-	/* 自分で追加したもの */
 	const float ROTATION_SPEED = 0.05f;	//回転スピード
 	const float POLYGON_SIZE = 100.0f;	//サイズ
 
 public: /* コンストラクタ・デストラクタ */
 	CObject();
-	~CObject();
+	virtual ~CObject();
 
-public: /* メンバ関数 */
-	HRESULT Init();		//初期化
-	void Uninit();		//終了
-	void Update();		//更新
-	void Draw();		//描画
+public: /* 純粋仮想関数 */
+	virtual HRESULT Init() = 0;	//初期化
+	virtual void Uninit() = 0;	//終了
+	virtual void Update() = 0;	//更新
+	virtual void Draw() = 0;	//描画
 
-private: /* メンバ変数 */
+protected: /* メンバ変数 */
 	LPDIRECT3DTEXTURE9 m_pTexture;		//テクスチャへのポインタ
 	LPDIRECT3DVERTEXBUFFER9 m_pVtxBuff;	//頂点バッファへのポインタ
 	D3DXVECTOR3 m_pos;					//位置
