@@ -12,7 +12,7 @@
 //***************************
 //定数の定義
 //***************************
-const DWORD FVF_VERTEX_2D = (D3DFVF_XYZRHW | D3DFVF_DIFFUSE);	//頂点フォーマット
+const DWORD FVF_VERTEX_2D = (D3DFVF_XYZRHW | D3DFVF_DIFFUSE | D3DFVF_TEX1);	//頂点フォーマット
 
 //***************************
 //オブジェクトクラスの定義

@@ -45,6 +45,14 @@ HRESULT CObject2D::Init()
 	//デバイスの取得
 	LPDIRECT3DDEVICE9 pDevice = GetRenderer()->GetDevice();
 
+	//テクスチャポインタの初期化
+	//memset(m_pTexture, NULL, sizeof(m_pTexture));
+
+	//テクスチャの読み込み
+	D3DXCreateTextureFromFile(pDevice,
+								"data/TEXTURE/slack_icon.png",
+								&m_pTexture);
+
 	//位置
 	m_pos = D3DXVECTOR3((SCREEN_WIDTH * 0.5f), (SCREEN_HEIGHT * 0.5f), 0.0f);
 
@@ -102,6 +110,12 @@ HRESULT CObject2D::Init()
 	pVtx[2].col = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
 	pVtx[3].col = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
 
+	//テクスチャ座標の設定
+	pVtx[0].tex = D3DXVECTOR2(0.0f, 0.0f);
+	pVtx[1].tex = D3DXVECTOR2(1.0f, 0.0f);
+	pVtx[2].tex = D3DXVECTOR2(0.0f, 1.0f);
+	pVtx[3].tex = D3DXVECTOR2(1.0f, 1.0f);
+
 	//頂点バッファをアンロックする
 	m_pVtxBuff->Unlock();
 
@@ -118,6 +132,13 @@ void CObject2D::Uninit()
 	{
 		m_pVtxBuff->Release();
 		m_pVtxBuff = nullptr;
+	}
+
+	//テクスチャの破棄
+	if (m_pTexture != nullptr)
+	{
+		m_pTexture->Release();
+		m_pTexture = nullptr;
 	}
 }
 
@@ -193,6 +214,9 @@ void CObject2D::Draw()
 
 	//頂点フォーマットの設定
 	pDevice->SetFVF(FVF_VERTEX_2D);
+
+	//テクスチャの設定
+	pDevice->SetTexture(0, m_pTexture);
 
 	//ポリゴンの描画
 	pDevice->DrawPrimitive(D3DPT_TRIANGLESTRIP,	//プリミティブの種類

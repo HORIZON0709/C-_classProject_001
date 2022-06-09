@@ -20,6 +20,7 @@ public: /* 構造体の定義 */
 		D3DXVECTOR3 pos;	//位置
 		float rhw;			//法線
 		D3DCOLOR col;		//色
+		D3DXVECTOR2 tex;	//テクスチャ座標
 	};
 
 private: /* 定数の定義 */
