@@ -14,6 +14,11 @@
 //***************************
 class CRenderer
 {/* 基本クラス */
+public: /* 定数の定義 */
+	static const int SCREEN_WIDTH = 1280;	//スクリーンの幅
+	static const int SCREEN_HEIGHT = 720;	//スクリーンの高さ
+	static const int MAX_POLYGON = 3;		//ポリゴンの最大数
+
 public: /* コンストラクタ・デストラクタ */
 	CRenderer();
 	~CRenderer();

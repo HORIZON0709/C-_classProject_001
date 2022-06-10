@@ -24,10 +24,8 @@ public: /* 構造体の定義 */
 	};
 
 private: /* 定数の定義 */
-	const float ROTATION_SPEED = 0.05f;	//回転スピード
-	const float POLYGON_SIZE = 100.0f;	//サイズ
-public:
-	static const int MAX_POLYGON = 5;	//ポリゴンの最大数
+	static const float ROTATION_SPEED;	//回転スピード
+	static const float POLYGON_SIZE;	//サイズ
 
 public: /* コンストラクタ・デストラクタ */
 	CObject2D();

@@ -146,7 +146,7 @@ void CRenderer::Uninit()
 //================================================
 void CRenderer::Update()
 {
-	for (int i = 0; i < CObject2D::MAX_POLYGON; i++)
+	for (int i = 0; i < MAX_POLYGON; i++)
 	{
 		GetObjects()[i]->Update();	//オブジェクト
 	}
@@ -165,7 +165,7 @@ void CRenderer::Draw()
 	//Direct3Dによる描画の開始
 	if (SUCCEEDED(m_pD3DDevice->BeginScene()))
 	{
-		for (int i = 0; i < CObject2D::MAX_POLYGON; i++)
+		for (int i = 0; i < MAX_POLYGON; i++)
 		{
 			GetObjects()[i]->Draw();	//オブジェクト
 		}

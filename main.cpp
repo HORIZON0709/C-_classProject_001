@@ -35,10 +35,10 @@ namespace
 {
 int s_nCountFPS;	//FPSカウンタ
 CRenderer* s_pRenderer = nullptr;					//レンダリングのポインタ
-CObject* s_apObject[CObject2D::MAX_POLYGON] = {};	//オブジェクトのポインタ
+CObject* s_apObject[CRenderer::MAX_POLYGON] = {};	//オブジェクトのポインタ
 }//namespaceはここまで
 
-//=============================================================================
+ //=============================================================================
 //メイン関数
 //=============================================================================
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPSTR /*lpCmdLine*/, int nCmdShow)
@@ -62,7 +62,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPSTR /*lpC
 	//ウィンドウクラスの登録
 	RegisterClassEx(&wcex);
 
-	RECT rect = { 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT };
+	RECT rect = { 0, 0, CRenderer::SCREEN_WIDTH, CRenderer::SCREEN_HEIGHT };
 	//指定したクライアント領域を確保するために必要なウィンドウ座標を計算
 	AdjustWindowRect(&rect, WS_OVERLAPPEDWINDOW, FALSE);
 
@@ -84,7 +84,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPSTR /*lpC
 		s_pRenderer = new CRenderer;	//メモリの動的確保
 	}
 
-	for (int i = 0; i < CObject2D::MAX_POLYGON; i++)
+	for (int i = 0; i < CRenderer::MAX_POLYGON; i++)
 	{
 		if (s_apObject[i] != nullptr)
 		{//NULLチェック
@@ -103,7 +103,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPSTR /*lpC
 	}
 
 	//オブジェクトの初期化
-	for (int i = 0; i < CObject2D::MAX_POLYGON; i++)
+	for (int i = 0; i < CRenderer::MAX_POLYGON; i++)
 	{
 		if (FAILED(s_apObject[i]->Init()))
 		{//初期化処理が失敗した場合
@@ -111,7 +111,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPSTR /*lpC
 			return -1;
 		}
 
-		D3DXVECTOR3 pos = D3DXVECTOR3((SCREEN_WIDTH * (0.1f * (i + 1))), (SCREEN_HEIGHT * 0.1f), 0.0f);
+		//生成数が増える毎に位置をずらす
+		D3DXVECTOR3 pos = D3DXVECTOR3((CRenderer::SCREEN_WIDTH * (0.1f * (i + 1))), (CRenderer::SCREEN_HEIGHT * 0.1f), 0.0f);
 		s_apObject[i]->SetPos(pos);
 	}
 
@@ -179,7 +180,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPSTR /*lpC
 		}
 	}
 
-	for (int i = 0; i < CObject2D::MAX_POLYGON; i++)
+	for (int i = 0; i < CRenderer::MAX_POLYGON; i++)
 	{
 		if (s_apObject[i] != nullptr)
 		{//NULLチェック

@@ -12,6 +12,12 @@
 
 #include <assert.h>
 
+//***************************
+//定数の定義
+//***************************
+const float CObject2D::ROTATION_SPEED = 0.05f;
+const float CObject2D::POLYGON_SIZE = 100.0f;
+
 //================================================
 //コンストラクタ
 //================================================
@@ -54,7 +60,7 @@ HRESULT CObject2D::Init()
 								&m_pTexture);
 
 	//位置
-	m_pos = D3DXVECTOR3((SCREEN_WIDTH * 0.5f), (SCREEN_HEIGHT * 0.5f), 0.0f);
+	m_pos = D3DXVECTOR3((CRenderer::SCREEN_WIDTH * 0.5f), (CRenderer::SCREEN_HEIGHT * 0.5f), 0.0f);
 
 	//向き
 	m_rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
