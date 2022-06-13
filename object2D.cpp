@@ -21,7 +21,7 @@ const float CObject2D::POLYGON_SIZE = 100.0f;
 //================================================
 //生成
 //================================================
-CObject* CObject2D::Create(const D3DXVECTOR3 &pos)
+CObject* CObject2D::Create()
 {
 	CObject* pObject = nullptr;	//ポインタ
 
@@ -36,9 +36,6 @@ CObject* CObject2D::Create(const D3DXVECTOR3 &pos)
 
 	pObject->Init();	//初期化
 
-	//位置を設定
-	pObject->SetPos(pos);
-	
 	return pObject;	//動的確保したものを返す
 }
 

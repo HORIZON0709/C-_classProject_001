@@ -27,12 +27,15 @@ void CObject::CreateAll()
 			m_apObject[i] = nullptr;
 		}
 
+		//¶¬
+		m_apObject[i] = CObject2D::Create();
+
 		//¶¬”‚ª‘‚¦‚é–ˆ‚ÉˆÊ’u‚ð‚¸‚ç‚·
 		float fPosX = (CRenderer::SCREEN_WIDTH * (0.1f * (i + 1)));
 		float fPosY = (CRenderer::SCREEN_HEIGHT * 0.1f);
 
-		//¶¬(“¯Žž‚ÉˆÊ’u‚àÝ’è)
-		m_apObject[i] = CObject2D::Create(D3DXVECTOR3(fPosX, fPosY, 0));
+		//ˆÊ’u‚ÌÝ’è
+		m_apObject[i]->SetPos(D3DXVECTOR3(fPosX, fPosY, 0));
 	}
 }
 
