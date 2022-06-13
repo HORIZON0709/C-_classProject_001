@@ -79,10 +79,19 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPSTR /*lpC
 		hInstance,
 		NULL);
 
+	/* レンダラー */
+
 	if (s_pRenderer == nullptr)
 	{//NULLチェック
 		s_pRenderer = new CRenderer;	//メモリの動的確保
 	}
+
+	if (FAILED(s_pRenderer->Init(hWnd, TRUE)))
+	{//初期化処理が失敗した場合
+		return -1;
+	}
+
+	/* オブジェクト */
 
 	for (int i = 0; i < CRenderer::MAX_POLYGON; i++)
 	{
@@ -94,17 +103,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPSTR /*lpC
 		/* nullptrの場合 */
 
 		s_apObject[i] = new CObject2D;	//メモリの動的確保
-	}
 
-	//初期化処理
-	if (FAILED(s_pRenderer->Init(hWnd, TRUE)))
-	{//初期化処理が失敗した場合
-		return -1;
-	}
+		/* 初期化 */
 
-	//オブジェクトの初期化
-	for (int i = 0; i < CRenderer::MAX_POLYGON; i++)
-	{
 		if (FAILED(s_apObject[i]->Init()))
 		{//初期化処理が失敗した場合
 			assert(false);
@@ -112,8 +113,11 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPSTR /*lpC
 		}
 
 		//生成数が増える毎に位置をずらす
-		D3DXVECTOR3 pos = D3DXVECTOR3((CRenderer::SCREEN_WIDTH * (0.1f * (i + 1))), (CRenderer::SCREEN_HEIGHT * 0.1f), 0.0f);
-		s_apObject[i]->SetPos(pos);
+		float fPosX = (CRenderer::SCREEN_WIDTH * (0.1f * (i + 1)));	//X座標
+		float fPosY = (CRenderer::SCREEN_HEIGHT * 0.1f);			//Y座標
+
+		//位置を設定
+		s_apObject[i]->SetPos(D3DXVECTOR3(fPosX, fPosY, 0.0f));
 	}
 
 	//分解能を設定
