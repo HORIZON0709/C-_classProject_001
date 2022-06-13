@@ -29,16 +29,16 @@ private: /* 定数の定義 */
 
 public: /* コンストラクタ・デストラクタ */
 	CObject2D();
-	~CObject2D();
+	~CObject2D() override;
 
 public: /* メンバ関数 */
-	HRESULT Init()override;	//初期化
-	void Uninit()override;	//終了
-	void Update()override;	//更新
-	void Draw()override;	//描画
+	HRESULT Init() override;	//初期化
+	void Uninit() override;	//終了
+	void Update() override;	//更新
+	void Draw() override;	//描画
 public: /* Set,Get系 */
-	void SetPos(const D3DXVECTOR3 &pos)override;	//位置を設定
-	D3DXVECTOR3 GetPos()override;					//位置を取得
+	void SetPos(const D3DXVECTOR3 &pos) override;	//位置を設定
+	D3DXVECTOR3 GetPos() override;					//位置を取得
 
 private: /* メンバ変数 */
 	LPDIRECT3DTEXTURE9 m_pTexture;		//テクスチャへのポインタ
