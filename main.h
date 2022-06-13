@@ -37,6 +37,6 @@ int GetFPS();
 CRenderer* GetRenderer();
 
 /* オブジェクト情報の取得 */
-CObject** GetObjects();
+//CObject** GetObjects();
 
 #endif

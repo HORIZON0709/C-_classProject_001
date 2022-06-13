@@ -27,15 +27,18 @@ private: /* 定数の定義 */
 	static const float ROTATION_SPEED;	//回転スピード
 	static const float POLYGON_SIZE;	//サイズ
 
+public: /* 静的メンバ関数 */
+	static CObject* Create(const D3DXVECTOR3 &pos);	//生成
+
 public: /* コンストラクタ・デストラクタ */
 	CObject2D();
 	~CObject2D() override;
 
 public: /* メンバ関数 */
 	HRESULT Init() override;	//初期化
-	void Uninit() override;	//終了
-	void Update() override;	//更新
-	void Draw() override;	//描画
+	void Uninit() override;		//終了
+	void Update() override;		//更新
+	void Draw() override;		//描画
 public: /* Set,Get系 */
 	void SetPos(const D3DXVECTOR3 &pos) override;	//位置を設定
 	D3DXVECTOR3 GetPos() override;					//位置を取得
@@ -45,10 +48,11 @@ private: /* メンバ変数 */
 	LPDIRECT3DVERTEXBUFFER9 m_pVtxBuff;	//頂点バッファへのポインタ
 	D3DXVECTOR3 m_pos;					//位置
 	D3DXVECTOR3 m_rot;					//向き
-	float m_fLength;					//対角線の長さ
-	float m_fAngle;						//対角線の角度
-	float m_fSize;						//サイズ
-	float m_fCol;						//色
+
+	float m_fLength;	//対角線の長さ
+	float m_fAngle;		//対角線の角度
+	float m_fSize;		//サイズ
+	float m_fCol;		//色
 };
 
 #endif

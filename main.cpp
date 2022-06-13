@@ -34,8 +34,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 namespace
 {
 int s_nCountFPS;	//FPSカウンタ
-CRenderer* s_pRenderer = nullptr;					//レンダリングのポインタ
-CObject* s_apObject[CRenderer::MAX_POLYGON] = {};	//オブジェクトのポインタ
+CRenderer* s_pRenderer = nullptr;	//レンダリングのポインタ
 }//namespaceはここまで
 
  //=============================================================================
@@ -93,32 +92,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPSTR /*lpC
 
 	/* オブジェクト */
 
-	for (int i = 0; i < CRenderer::MAX_POLYGON; i++)
-	{
-		if (s_apObject[i] != nullptr)
-		{//NULLチェック
-			continue;
-		}
-
-		/* nullptrの場合 */
-
-		s_apObject[i] = new CObject2D;	//メモリの動的確保
-
-		/* 初期化 */
-
-		if (FAILED(s_apObject[i]->Init()))
-		{//初期化処理が失敗した場合
-			assert(false);
-			return -1;
-		}
-
-		//生成数が増える毎に位置をずらす
-		float fPosX = (CRenderer::SCREEN_WIDTH * (0.1f * (i + 1)));	//X座標
-		float fPosY = (CRenderer::SCREEN_HEIGHT * 0.1f);			//Y座標
-
-		//位置を設定
-		s_apObject[i]->SetPos(D3DXVECTOR3(fPosX, fPosY, 0.0f));
-	}
+	CObject2D::CreateAll();	//全ての生成
 
 	//分解能を設定
 	timeBeginPeriod(1);
@@ -184,15 +158,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPSTR /*lpC
 		}
 	}
 
-	for (int i = 0; i < CRenderer::MAX_POLYGON; i++)
-	{
-		if (s_apObject[i] != nullptr)
-		{//NULLチェック
-			s_apObject[i]->Uninit();	//終了処理
-			delete s_apObject[i];	//メモリの解放
-			s_apObject[i] = nullptr;	//nullptrにする
-		}
-	}
+	CObject2D::ReleaseAll();	//全ての解放
 
 	if (s_pRenderer != nullptr)
 	{//NULLチェック
@@ -260,7 +226,7 @@ CRenderer* GetRenderer()
 //================================================
 //オブジェクト情報の取得
 //================================================
-CObject** GetObjects()
-{
-	return &s_apObject[0];
-}
+//CObject** GetObjects()
+//{
+//	return &s_apObject[0];
+//}

@@ -8,7 +8,7 @@
 //インクルード
 //***************************
 #include "renderer.h"
-#include "object2D.h"
+#include "object.h"
 
 #include <assert.h>
 
@@ -149,10 +149,7 @@ void CRenderer::Uninit()
 //================================================
 void CRenderer::Update()
 {
-	for (int i = 0; i < MAX_POLYGON; i++)
-	{
-		GetObjects()[i]->Update();	//オブジェクト
-	}
+	CObject::UpdateAll();	//オブジェクト
 }
 
 //================================================
@@ -168,10 +165,7 @@ void CRenderer::Draw()
 	//Direct3Dによる描画の開始
 	if (SUCCEEDED(m_pD3DDevice->BeginScene()))
 	{
-		for (int i = 0; i < MAX_POLYGON; i++)
-		{
-			GetObjects()[i]->Draw();	//オブジェクト
-		}
+		CObject::DrawAll();	//オブジェクト
 
 #ifdef _DEBUG
 		//FPS表示

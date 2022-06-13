@@ -19,6 +19,30 @@ const float CObject2D::ROTATION_SPEED = 0.05f;
 const float CObject2D::POLYGON_SIZE = 100.0f;
 
 //================================================
+//生成
+//================================================
+CObject* CObject2D::Create(const D3DXVECTOR3 &pos)
+{
+	CObject* pObject = nullptr;	//ポインタ
+
+	if (pObject != nullptr)
+	{//NULLチェック
+		assert(false);
+	}
+
+	/* nullptrの場合 */
+
+	pObject = new CObject2D;	//メモリの動的確保
+
+	pObject->Init();	//初期化
+
+	//位置を設定
+	pObject->SetPos(pos);
+	
+	return pObject;	//動的確保したものを返す
+}
+
+//================================================
 //コンストラクタ
 //================================================
 CObject2D::CObject2D() : 
@@ -50,9 +74,6 @@ HRESULT CObject2D::Init()
 {
 	//デバイスの取得
 	LPDIRECT3DDEVICE9 pDevice = GetRenderer()->GetDevice();
-
-	//テクスチャポインタの初期化
-	//memset(m_pTexture, NULL, sizeof(m_pTexture));
 
 	//テクスチャの読み込み
 	D3DXCreateTextureFromFile(pDevice,
