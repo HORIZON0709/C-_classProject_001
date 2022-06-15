@@ -17,6 +17,13 @@
 //***************************
 const float CObject2D::ROTATION_SPEED = 0.05f;
 const float CObject2D::POLYGON_SIZE = 100.0f;
+const D3DXVECTOR3 CObject2D::POS_VTX[4] = 
+{
+	D3DXVECTOR3(-1.0f,-1.0f,0.0f),
+	D3DXVECTOR3(+1.0f,-1.0f,0.0f),
+	D3DXVECTOR3(-1.0f,+1.0f,0.0f),
+	D3DXVECTOR3(+1.0f,+1.0f,0.0f),
+};
 
 //================================================
 //生成
@@ -86,12 +93,6 @@ HRESULT CObject2D::Init()
 	//サイズ
 	m_fSize = POLYGON_SIZE;
 
-	//対角線の長さを算出する
-	m_fLength = sqrtf((m_fSize * m_fSize) + (m_fSize * m_fSize)) * 0.5f;
-
-	//対角線の角度を算出する
-	m_fAngle = atan2f(m_fSize, m_fSize);
-
 	//頂点バッファの生成
 	pDevice->CreateVertexBuffer(sizeof(VERTEX_2D) * 4,
 								D3DUSAGE_WRITEONLY,
@@ -106,21 +107,10 @@ HRESULT CObject2D::Init()
 	m_pVtxBuff->Lock(0, 0, (void**)&pVtx, 0);
 
 	//頂点情報を設定
-	pVtx[0].pos.x = m_pos.x + sinf(m_rot.z + (m_fAngle * -D3DX_PI)) * m_fLength;
-	pVtx[0].pos.y = m_pos.y + cosf(m_rot.z + (m_fAngle * -D3DX_PI)) * m_fLength;
-	pVtx[0].pos.z = 0.0f;
-
-	pVtx[1].pos.x = m_pos.x + sinf(m_rot.z + (m_fAngle * D3DX_PI)) * m_fLength;
-	pVtx[1].pos.y = m_pos.y + cosf(m_rot.z + (m_fAngle * D3DX_PI)) * m_fLength;
-	pVtx[1].pos.z = 0.0f;
-
-	pVtx[2].pos.x = m_pos.x + sinf(m_rot.z + (m_fAngle * -1.0f)) * m_fLength;
-	pVtx[2].pos.y = m_pos.y + cosf(m_rot.z + (m_fAngle * -1.0f)) * m_fLength;
-	pVtx[2].pos.z = 0.0f;
-
-	pVtx[3].pos.x = m_pos.x + sinf(m_rot.z + m_fAngle) * m_fLength;
-	pVtx[3].pos.y = m_pos.y + cosf(m_rot.z + m_fAngle) * m_fLength;
-	pVtx[3].pos.z = 0.0f;
+	pVtx[0].pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	pVtx[1].pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	pVtx[2].pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	pVtx[3].pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 
 	//rhwの設定
 	pVtx[0].rhw = 1.0f;
@@ -172,6 +162,7 @@ void CObject2D::Uninit()
 void CObject2D::Update()
 {
 	m_rot.z -= ROTATION_SPEED;	//回転
+	m_fTimer++;					//カウントアップ
 
 	/* 角度の正規化 */
 	if (m_rot.z >= D3DX_PI)
@@ -184,10 +175,16 @@ void CObject2D::Update()
 	}
 
 	//サイズの拡大・縮小
-	m_fSize += cosf(m_rot.z) * 2.0f;
+	m_fSize = cosf(m_rot.z);
+	
+	D3DXVECTOR3 addPos[4];	//計算用配列
+	D3DXMATRIX mtx;			//計算用マトリックス
 
-	//対角線の長さを再計算
-	m_fLength = sqrtf((m_fSize * m_fSize) + (m_fSize * m_fSize)) * 0.5f;
+	//マトリックス作成
+	D3DXMatrixIdentity(&mtx);
+
+	//回転行数作成
+	D3DXMatrixRotationYawPitchRoll(&mtx, 0.0f, 0.0f, ((D3DX_PI * 2.0f) / 360.0f) * m_fTimer);
 
 	VERTEX_2D *pVtx;	//頂点情報へのポインタ
 
@@ -195,22 +192,12 @@ void CObject2D::Update()
 	m_pVtxBuff->Lock(0, 0, (void**)&pVtx, 0);
 
 	//頂点座標の更新
-	pVtx[0].pos.x = m_pos.x + sinf(m_rot.z + (m_fAngle * -3.0f)) * m_fLength;
-	pVtx[0].pos.y = m_pos.y + cosf(m_rot.z + (m_fAngle * -3.0f)) * m_fLength;
-	pVtx[0].pos.z = 0.0f;
-
-	pVtx[1].pos.x = m_pos.x + sinf(m_rot.z + (m_fAngle * 3.0f)) * m_fLength;
-	pVtx[1].pos.y = m_pos.y + cosf(m_rot.z + (m_fAngle * 3.0f)) * m_fLength;
-	pVtx[1].pos.z = 0.0f;
-
-	pVtx[2].pos.x = m_pos.x + sinf(m_rot.z + (m_fAngle * -1.0f)) * m_fLength;
-	pVtx[2].pos.y = m_pos.y + cosf(m_rot.z + (m_fAngle * -1.0f)) * m_fLength;
-	pVtx[2].pos.z = 0.0f;
-
-	pVtx[3].pos.x = m_pos.x + sinf(m_rot.z + m_fAngle) * m_fLength;
-	pVtx[3].pos.y = m_pos.y + cosf(m_rot.z + m_fAngle) * m_fLength;
-	pVtx[3].pos.z = 0.0f;
-
+	for (int i = 0; i < 4; i++)
+	{
+		D3DXVec3TransformCoord(&addPos[i], &POS_VTX[i], &mtx);
+		pVtx[i].pos = m_pos + addPos[i] * (POLYGON_SIZE * m_fSize);	//<-サイズ変更
+	}
+	
 	/* ↓色で遊んだ↓ */
 
 	m_fCol += 0.1f;

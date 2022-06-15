@@ -24,8 +24,9 @@ public: /* 構造体の定義 */
 	};
 
 private: /* 定数の定義 */
-	static const float ROTATION_SPEED;	//回転スピード
-	static const float POLYGON_SIZE;	//サイズ
+	static const float ROTATION_SPEED;		//回転スピード
+	static const float POLYGON_SIZE;		//サイズ
+	static const D3DXVECTOR3 POS_VTX[4];	//頂点の位置
 
 public: /* 静的メンバ関数 */
 	static CObject2D* Create();	//生成
@@ -53,6 +54,7 @@ private: /* メンバ変数 */
 	float m_fAngle;		//対角線の角度
 	float m_fSize;		//サイズ
 	float m_fCol;		//色
+	float m_fTimer;		//タイマー
 };
 
 #endif
