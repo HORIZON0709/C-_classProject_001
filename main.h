@@ -25,7 +25,6 @@
 //前方宣言
 //***************************
 class CRenderer;
-class CObject;
 
 //***************************
 //プロトタイプ宣言
@@ -35,8 +34,5 @@ int GetFPS();
 
 /* レンダリング情報の取得 */
 CRenderer* GetRenderer();
-
-/* オブジェクト情報の取得 */
-//CObject** GetObjects();
 
 #endif

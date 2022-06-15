@@ -21,9 +21,9 @@ const float CObject2D::POLYGON_SIZE = 100.0f;
 //================================================
 //生成
 //================================================
-CObject* CObject2D::Create()
+CObject2D* CObject2D::Create()
 {
-	CObject* pObject = nullptr;	//ポインタ
+	CObject2D* pObject = nullptr;	//ポインタ
 
 	if (pObject != nullptr)
 	{//NULLチェック

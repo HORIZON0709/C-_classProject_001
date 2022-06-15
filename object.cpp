@@ -28,7 +28,7 @@ void CObject::CreateAll()
 		}
 
 		//生成
-		m_apObject[i] = CObject2D::Create();
+		CObject2D::Create();
 
 		//生成数が増える毎に位置をずらす
 		float fPosX = (CRenderer::SCREEN_WIDTH * (0.1f * (i + 1)));
@@ -66,6 +66,13 @@ void CObject::UpdateAll()
 {
 	for (int i = 0; i < MAX_POLYGON; i++)
 	{
+		if (m_apObject[i] == nullptr)
+		{//NULLチェック
+			continue;
+		}
+
+		/* nullptrではない場合 */
+
 		m_apObject[i]->Update();	//更新
 	}
 }
@@ -77,6 +84,13 @@ void CObject::DrawAll()
 {
 	for (int i = 0; i < MAX_POLYGON; i++)
 	{
+		if (m_apObject[i] == nullptr)
+		{//NULLチェック
+			continue;
+		}
+
+		/* nullptrではない場合 */
+
 		m_apObject[i]->Draw();	//描画
 	}
 }
@@ -86,6 +100,19 @@ void CObject::DrawAll()
 //================================================
 CObject::CObject()
 {
+	for (int i = 0; i < MAX_POLYGON; i++)
+	{
+		if (m_apObject[i] != nullptr)
+		{//NULLチェック
+			continue;
+		}
+
+		/* nullptrの場合 */
+
+		m_apObject[i] = this;	//自身のポインタを返す
+		m_nNumAll++;
+		break;
+	}
 }
 
 //================================================

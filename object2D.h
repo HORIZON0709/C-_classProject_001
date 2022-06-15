@@ -28,7 +28,7 @@ private: /* 定数の定義 */
 	static const float POLYGON_SIZE;	//サイズ
 
 public: /* 静的メンバ関数 */
-	static CObject* Create();	//生成
+	static CObject2D* Create();	//生成
 
 public: /* コンストラクタ・デストラクタ */
 	CObject2D();
