@@ -38,6 +38,9 @@ void CObject::CreateAll()
 		//位置の設定
 		m_apObject[i]->SetPos(D3DXVECTOR3(fPosX, fPosY, 0));
 	}
+
+	//解放
+	m_apObject[1]->Release();
 }
 
 //================================================
@@ -111,7 +114,9 @@ CObject::CObject()
 		/* nullptrの場合 */
 
 		m_apObject[i] = this;	//自身のポインタを返す
-		m_nNumAll++;
+
+		m_nID = i;		//自分の番号を設定
+		m_nNumAll++;	//数を増やす
 		break;
 	}
 }
@@ -121,4 +126,25 @@ CObject::CObject()
 //================================================
 CObject::~CObject()
 {
+}
+
+//================================================
+//解放
+//================================================
+void CObject::Release()
+{
+	if (m_apObject[m_nID] == nullptr)
+	{//NULLチェック
+		return;
+	}
+
+	/* nullptrではない場合 */
+
+	int nID = m_nID;	//番号を保存
+
+	m_apObject[nID]->Uninit();	//終了
+	delete m_apObject[nID];		//メモリの解放
+	m_apObject[nID] = nullptr;	//nullptrにする
+
+	m_nNumAll--;	//数を減らす
 }
