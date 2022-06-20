@@ -13,12 +13,18 @@
 #include "renderer.h"
 
 //***************************
+//前方宣言
+//***************************
+class CInputKeyboard;
+
+//***************************
 //アプリケーションクラスの定義
 //***************************
 class CApplication
 {/* 基本クラス */
 public: /* 静的メンバ関数 */
-	static CRenderer* GetRenderer();	//レンダラー情報を取得
+	static CRenderer* GetRenderer();			//レンダラー情報を取得
+	static CInputKeyboard* GetInputKeyboard();	//キーボード情報を取得
 
 public: /* コンストラクタ・デストラクタ */
 	CApplication();
@@ -31,7 +37,8 @@ public: /* メンバ関数 */
 	void Draw();							//描画
 
 private: /* 静的メンバ関数 */
-	static CRenderer* m_pRenderer;	//レンダラーのポインタ
+	static CRenderer* m_pRenderer;				//レンダラーのポインタ
+	static CInputKeyboard* m_pInputKeyboard;	//キーボードのポインタ
 };
 
 #endif

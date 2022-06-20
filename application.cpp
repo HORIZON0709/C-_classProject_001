@@ -13,7 +13,8 @@
 //***************************
 //静的メンバ変数
 //***************************
-CRenderer* CApplication::m_pRenderer = nullptr;	//ポインタ
+CRenderer* CApplication::m_pRenderer = nullptr;				//レンダラー
+CInputKeyboard* CApplication::m_pInputKeyboard = nullptr;	//キーボード
 
 //================================================
 //レンダラー情報を取得
@@ -21,6 +22,14 @@ CRenderer* CApplication::m_pRenderer = nullptr;	//ポインタ
 CRenderer* CApplication::GetRenderer()
 {
 	return m_pRenderer;
+}
+
+//================================================
+//キーボード情報を取得
+//================================================
+CInputKeyboard* CApplication::GetInputKeyboard()
+{
+	return m_pInputKeyboard;
 }
 
 //================================================
