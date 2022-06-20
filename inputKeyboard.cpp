@@ -86,7 +86,7 @@ void CInputKeyboard::Uninit()
 //================================================
 void CInputKeyboard::Update()
 {
-	BYTE aKeyState[MAX_KEY];	//キーボードの入力情報
+	BYTE aKeyState[MAX_KEY] = {};	//キーボードの入力情報
 	
 	//入力デバイスからデータを取得
 	if (SUCCEEDED(m_pDevice->GetDeviceState(sizeof(aKeyState), &aKeyState[0])))

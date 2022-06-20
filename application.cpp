@@ -51,6 +51,11 @@ CApplication::~CApplication()
 //================================================
 HRESULT CApplication::Init(HWND hWnd, BOOL bWindow, HINSTANCE hInstance)
 {
+	if (m_pInputKeyboard == nullptr)
+	{//NULLチェック
+		m_pInputKeyboard = new CInputKeyboard;	//メモリの動的確保
+	}
+
 	if (m_pRenderer == nullptr)
 	{//NULLチェック
 		m_pRenderer = new CRenderer;	//メモリの動的確保
@@ -73,6 +78,13 @@ HRESULT CApplication::Init(HWND hWnd, BOOL bWindow, HINSTANCE hInstance)
 //================================================
 void CApplication::Uninit()
 {
+	if (m_pInputKeyboard != nullptr)
+	{//NULLチェック
+		m_pInputKeyboard->Uninit();	//終了処理
+		delete m_pInputKeyboard;	//メモリの解放
+		m_pInputKeyboard = nullptr;	//nullptrにする
+	}
+
 	CObject2D::ReleaseAll();	//全ての解放
 
 	if (m_pRenderer != nullptr)
@@ -88,6 +100,11 @@ void CApplication::Uninit()
 //================================================
 void CApplication::Update()
 {
+	if (m_pInputKeyboard != nullptr)
+	{
+		m_pInputKeyboard->Update();	//キーボード
+	}
+
 	m_pRenderer->Update();	//レンダラー
 }
 
