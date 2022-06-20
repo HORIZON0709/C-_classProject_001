@@ -14,7 +14,7 @@
 //静的メンバ変数
 //***************************
 CObject* CObject::m_apObject[MAX_POLYGON] = {};	//ポインタ
-int CObject::m_nNumAll = 0;
+int CObject::m_nNumAll = 0;						//最大数
 
 //================================================
 //全ての生成
@@ -40,7 +40,7 @@ void CObject::CreateAll()
 	}
 
 	//解放
-	m_apObject[1]->Release();
+	//m_apObject[1]->Release();
 }
 
 //================================================

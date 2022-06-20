@@ -7,6 +7,9 @@
 #ifndef _RENDERER_H_
 #define _RENDERER_H_
 
+//***************************
+//インクルード
+//***************************
 #include "main.h"
 
 //***************************
@@ -28,7 +31,7 @@ public: /* メンバ関数 */
 	void Update();							//更新
 	void Draw();							//描画
 private:
-	void DrawFPS();			//FPSの描画
+	void DrawFPS();	//FPSの描画
 public: /* Get系 */
 	LPDIRECT3DDEVICE9 GetDevice();	//デバイスの取得
 	/*
@@ -37,9 +40,9 @@ public: /* Get系 */
 	*/
 
 private: /* メンバ変数 */
-	LPDIRECT3D9 m_pD3D;					//Direct3Dオブジェクト
-	LPDIRECT3DDEVICE9 m_pD3DDevice;		//Deviceオブジェクト
-	LPD3DXFONT m_pFont;					//フォント
+	LPDIRECT3D9 m_pD3D;				//Direct3Dオブジェクト
+	LPDIRECT3DDEVICE9 m_pD3DDevice;	//Deviceオブジェクト
+	LPD3DXFONT m_pFont;				//フォント
 };
 
 #endif

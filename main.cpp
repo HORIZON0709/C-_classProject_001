@@ -7,7 +7,7 @@
 //***************************
 //インクルード
 //***************************
-#include "renderer.h"
+#include "application.h"
 #include "object2D.h"
 
 #include <assert.h>
@@ -34,7 +34,6 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 namespace
 {
 int s_nCountFPS;	//FPSカウンタ
-CRenderer* s_pRenderer = nullptr;	//レンダリングのポインタ
 }//namespaceはここまで
 
  //=============================================================================
@@ -78,21 +77,17 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPSTR /*lpC
 		hInstance,
 		NULL);
 
-	/* レンダラー */
+	/* アプリケーション */
 
-	if (s_pRenderer == nullptr)
+	CApplication* pApplication = nullptr;	//ポインタ
+
+	if (pApplication == nullptr)
 	{//NULLチェック
-		s_pRenderer = new CRenderer;	//メモリの動的確保
+		pApplication = new CApplication;	//メモリの動的確保
 	}
 
-	if (FAILED(s_pRenderer->Init(hWnd, TRUE)))
-	{//初期化処理が失敗した場合
-		return -1;
-	}
-
-	/* オブジェクト */
-
-	CObject2D::CreateAll();	//全ての生成
+	//初期化処理
+	pApplication->Init(hWnd, TRUE, hInstance);
 
 	//分解能を設定
 	timeBeginPeriod(1);
@@ -146,10 +141,10 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPSTR /*lpC
 				dwExecLastTime = dwCurrentTime;
 
 				//更新処理
-				s_pRenderer->Update();
+				pApplication->Update();
 
 				//描画処理
-				s_pRenderer->Draw();
+				pApplication->Draw();
 
 #ifdef _DEBUG
 				dwFrameCount++;
@@ -158,13 +153,11 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPSTR /*lpC
 		}
 	}
 
-	CObject2D::ReleaseAll();	//全ての解放
-
-	if (s_pRenderer != nullptr)
+	if (pApplication != nullptr)
 	{//NULLチェック
-		s_pRenderer->Uninit();	//終了処理
-		delete s_pRenderer;		//メモリの解放
-		s_pRenderer = nullptr;	//nullptrにする
+		pApplication->Uninit();	//終了処理
+		delete pApplication;	//メモリの解放
+		pApplication = nullptr;	//nullptrにする
 	}
 
 	//ウィンドウクラスの登録を解除
@@ -213,12 +206,4 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 int GetFPS()
 {
 	return s_nCountFPS;
-}
-
-//================================================
-//レンダリング情報の取得
-//================================================
-CRenderer* GetRenderer()
-{
-	return s_pRenderer;
 }

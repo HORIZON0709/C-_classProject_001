@@ -8,17 +8,17 @@
 //インクルード
 //***************************
 #include "object2D.h"
-#include "renderer.h"
+#include "application.h"
 
 #include <assert.h>
 
 //***************************
 //定数の定義
 //***************************
-const float CObject2D::ROTATION_SPEED = 0.05f;
-const float CObject2D::POLYGON_SIZE = 100.0f;
-const D3DXVECTOR3 CObject2D::POS_VTX[4] = 
-{
+const float CObject2D::ROTATION_SPEED = 0.05f;	//回転速度
+const float CObject2D::POLYGON_SIZE = 100.0f;	//サイズ
+const D3DXVECTOR3 CObject2D::POS_VTX[4] =
+{/* 頂点の位置 */
 	D3DXVECTOR3(-1.0f,-1.0f,0.0f),
 	D3DXVECTOR3(+1.0f,-1.0f,0.0f),
 	D3DXVECTOR3(-1.0f,+1.0f,0.0f),
@@ -77,7 +77,7 @@ CObject2D::~CObject2D()
 HRESULT CObject2D::Init()
 {
 	//デバイスの取得
-	LPDIRECT3DDEVICE9 pDevice = GetRenderer()->GetDevice();
+	LPDIRECT3DDEVICE9 pDevice = CApplication::GetRenderer()->GetDevice();
 
 	//テクスチャの読み込み
 	D3DXCreateTextureFromFile(pDevice,
@@ -218,7 +218,7 @@ void CObject2D::Update()
 void CObject2D::Draw()
 {
 	//デバイスの取得
-	LPDIRECT3DDEVICE9 pDevice = GetRenderer()->GetDevice();
+	LPDIRECT3DDEVICE9 pDevice = CApplication::GetRenderer()->GetDevice();
 
 	//頂点バッファをデータストリームに設定
 	pDevice->SetStreamSource(0, m_pVtxBuff, 0, sizeof(VERTEX_2D));
