@@ -17,30 +17,6 @@ CObject* CObject::m_apObject[MAX_POLYGON] = {};	//ポインタ
 int CObject::m_nNumAll = 0;						//最大数
 
 //================================================
-//全ての生成
-//================================================
-void CObject::CreateAll()
-{
-	for (int i = 0; i < MAX_POLYGON; i++)
-	{
-		if (m_apObject[i] != nullptr)
-		{//NULLチェック
-			m_apObject[i] = nullptr;
-		}
-
-		//生成
-		CObject2D::Create();
-
-		//生成数が増える毎に位置をずらす
-		float fPosX = (CRenderer::SCREEN_WIDTH * (0.1f * (i + 1)));
-		float fPosY = (CRenderer::SCREEN_HEIGHT * 0.1f);
-
-		//位置の設定
-		m_apObject[i]->SetPos(D3DXVECTOR3(fPosX, fPosY, 0));
-	}
-}
-
-//================================================
 //全ての解放
 //================================================
 void CObject::ReleaseAll()
@@ -54,9 +30,7 @@ void CObject::ReleaseAll()
 
 		/* nullptrではない場合 */
 
-		m_apObject[i]->Uninit();	//終了
-		delete m_apObject[i];		//メモリの解放
-		m_apObject[i] = nullptr;	//nullptrにする
+		m_apObject[i]->Release();	//解放
 	}
 }
 

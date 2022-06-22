@@ -9,7 +9,6 @@
 //***************************
 #include "player.h"
 #include "application.h"
-#include "inputKeyboard.h"
 
 #include <assert.h>
 
@@ -55,7 +54,9 @@ HRESULT CPlayer::Init(const char* filePass)
 {
 	CObject2D::Init(filePass);	//親クラス
 
-	m_pos = D3DXVECTOR3((CRenderer::SCREEN_WIDTH * 0.5f), (CRenderer::SCREEN_HEIGHT * 0.5f), 0.0f);
+	//位置を設定
+	D3DXVECTOR3 pos = D3DXVECTOR3((CRenderer::SCREEN_WIDTH * 0.5f), (CRenderer::SCREEN_HEIGHT * 0.5f), 0.0f);
+	CObject2D::SetPos(pos);
 
 	return S_OK;
 }
@@ -73,6 +74,8 @@ void CPlayer::Uninit()
 //================================================
 void CPlayer::Update()
 {
+	CObject2D::Update();	//親クラス
+
 	//CInputKeyboard input;	//キーボード
 	//
 	//if (input.GetPress(DIK_D))
@@ -83,26 +86,6 @@ void CPlayer::Update()
 	//{//左
 	//	m_pos.x -= 50.0f;
 	//}
-
-	VERTEX_2D *pVtx;	//頂点情報へのポインタ
-
-	//頂点バッファをロックし、頂点情報へのポインタを取得
-	m_pVtxBuff->Lock(0, 0, (void**)&pVtx, 0);
-
-	//長いから短くする
-	float fLeft		= (m_pos.x - m_fSize);
-	float fRight	= (m_pos.x + m_fSize);
-	float fTop		= (m_pos.y + m_fSize);
-	float fBottom	= (m_pos.y - m_fSize);
-
-	//頂点情報を更新
-	pVtx[0].pos = D3DXVECTOR3(fLeft, fTop, 0.0f);
-	pVtx[1].pos = D3DXVECTOR3(fRight, fTop, 0.0f);
-	pVtx[2].pos = D3DXVECTOR3(fLeft, fBottom, 0.0f);
-	pVtx[3].pos = D3DXVECTOR3(fRight, fBottom, 0.0f);
-
-	//頂点バッファをアンロックする
-	m_pVtxBuff->Unlock();
 }
 
 //================================================

@@ -9,14 +9,13 @@
 //***************************
 #include "object2D.h"
 #include "application.h"
-#include "inputKeyboard.h"
 
 #include <assert.h>
 
 //***************************
 //定数の定義
 //***************************
-const float CObject2D::ROTATION_SPEED = 0.05f;	//回転速度
+const float CObject2D::ROTATION_SPEED = 0.01f;	//回転速度
 const float CObject2D::POLYGON_SIZE = 100.0f;	//サイズ
 const D3DXVECTOR3 CObject2D::POS_VTX[4] =
 {/* 頂点の位置 */
@@ -55,8 +54,6 @@ CObject2D::CObject2D() :
 	m_pVtxBuff(nullptr),
 	m_pos(D3DXVECTOR3(0.0f, 0.0f, 0.0f)),
 	m_rot(D3DXVECTOR3(0.0f, 0.0f, 0.0f)), 
-	m_fLength(0.0f), 
-	m_fAngle(0.0f), 
 	m_fSize(0.0f),
 	m_fCol(0.0f)
 {
@@ -158,14 +155,7 @@ void CObject2D::Uninit()
 //================================================
 void CObject2D::Update()
 {
-	CInputKeyboard input;
-	
-	if (input.GetPress(DIK_SPACE))
-	{
-		m_rot.z -= ROTATION_SPEED;
-	}
-
-	//m_rot.z -= ROTATION_SPEED;	//回転
+	m_rot.z -= ROTATION_SPEED;	//回転
 	m_fTimer++;					//カウントアップ
 
 	/* 角度の正規化 */
@@ -202,18 +192,27 @@ void CObject2D::Update()
 		pVtx[i].pos = m_pos + addPos[i] * (POLYGON_SIZE * m_fSize);	//<-サイズ変更
 	}
 	
-	/* ↓色で遊んだ↓ */
-
-	m_fCol += 0.1f;
-
-	//頂点カラーの設定
-	pVtx[0].col = D3DXCOLOR(cosf(m_fCol * 0.7f), cosf(m_fCol * 0.2f), cosf(m_fCol * 0.9f), 1.0f);
-	pVtx[1].col = D3DXCOLOR(cosf(m_fCol * 0.3f), cosf(m_fCol * 0.4f), cosf(m_fCol * 0.7f), 1.0f);
-	pVtx[2].col = D3DXCOLOR(cosf(m_fCol * 0.9f), cosf(m_fCol * 0.6f), cosf(m_fCol * 0.5f), 1.0f);
-	pVtx[3].col = D3DXCOLOR(cosf(m_fCol * 1.0f), cosf(m_fCol * 0.8f), cosf(m_fCol * 0.3f), 1.0f);
-
 	//頂点バッファをアンロックする
 	m_pVtxBuff->Unlock();
+
+	//VERTEX_2D *pVtx;    //頂点情報へのポインタ
+
+	////頂点バッファをロックし、頂点情報へのポインタを取得
+	//m_pVtxBuff->Lock(0, 0, (void**)&pVtx, 0);
+
+	//float fLeft		= (m_pos.x - m_fSize);
+	//float fRight	= (m_pos.x + m_fSize);
+	//float fTop		= (m_pos.y + m_fSize);
+	//float fBottom	= (m_pos.y - m_fSize);
+
+	////頂点座標の更新
+	//pVtx[0].pos = D3DXVECTOR3(fLeft, fTop, 0.0f);
+	//pVtx[1].pos = D3DXVECTOR3(fRight, fTop, 0.0f);
+	//pVtx[2].pos = D3DXVECTOR3(fLeft, fBottom, 0.0f);
+	//pVtx[3].pos = D3DXVECTOR3(fRight, fBottom, 0.0f);
+
+	////頂点バッファをアンロックする
+	//m_pVtxBuff->Unlock();
 }
 
 //================================================

@@ -84,10 +84,6 @@ HRESULT CApplication::Init(HWND hWnd, BOOL bWindow, HINSTANCE hInstance)
 		return E_FAIL;
 	}
 
-	/* オブジェクト */
-
-	CObject2D::CreateAll();	//全ての生成
-
 	/* プレイヤー */
 
 	m_pPlayer = CPlayer::Create();	//生成
@@ -100,6 +96,13 @@ HRESULT CApplication::Init(HWND hWnd, BOOL bWindow, HINSTANCE hInstance)
 //================================================
 void CApplication::Uninit()
 {
+	/* オブジェクト */
+
+	CObject2D::ReleaseAll();	//全ての解放
+	
+	/* プレイヤー */
+	m_pPlayer = nullptr;	//nullptrにする
+
 	/* キーボード */
 
 	if (m_pInputKeyboard != nullptr)
@@ -108,19 +111,6 @@ void CApplication::Uninit()
 		delete m_pInputKeyboard;	//メモリの解放
 		m_pInputKeyboard = nullptr;	//nullptrにする
 	}
-
-	/* プレイヤー */
-
-	if (m_pPlayer != nullptr)
-	{//NULLチェック
-		m_pPlayer->Uninit();	//終了処理
-		delete m_pPlayer;		//メモリの解放
-		m_pPlayer = nullptr;	//nullptrにする
-	}
-
-	/* オブジェクト */
-
-	CObject2D::ReleaseAll();	//全ての解放
 
 	/* レンダラー */
 
@@ -163,8 +153,8 @@ void CApplication::Draw()
 		m_pRenderer->Draw();	//レンダラー
 	}
 
-	if (m_pPlayer != nullptr)
-	{//NULLチェック
-		m_pPlayer->Draw();	//プレイヤー
-	}
+	//if (m_pPlayer != nullptr)
+	//{//NULLチェック
+	//	m_pPlayer->Draw();	//プレイヤー
+	//}
 }

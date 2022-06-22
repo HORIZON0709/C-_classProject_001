@@ -23,10 +23,9 @@ const DWORD FVF_VERTEX_2D = (D3DFVF_XYZRHW | D3DFVF_DIFFUSE | D3DFVF_TEX1);	//頂
 class CObject
 {/* 基本クラス */
 public: /* 定数の定義 */
-	static const int MAX_POLYGON = 3;	//ポリゴンの最大数
+	static const int MAX_POLYGON = 8;	//ポリゴンの最大数
 
 public: /* 静的メンバ関数 */
-	static void CreateAll();	//全ての生成
 	static void ReleaseAll();	//全ての解放
 	static void UpdateAll();	//全ての更新
 	static void DrawAll();		//全ての描画
