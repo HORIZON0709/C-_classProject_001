@@ -9,6 +9,7 @@
 //***************************
 #include "object2D.h"
 #include "application.h"
+#include "inputKeyboard.h"
 
 #include <assert.h>
 
@@ -30,20 +31,20 @@ const D3DXVECTOR3 CObject2D::POS_VTX[4] =
 //================================================
 CObject2D* CObject2D::Create()
 {
-	CObject2D* pObject = nullptr;	//ポインタ
+	CObject2D* pObject2D = nullptr;	//ポインタ
 
-	if (pObject != nullptr)
+	if (pObject2D != nullptr)
 	{//NULLチェック
 		assert(false);
 	}
 
 	/* nullptrの場合 */
 
-	pObject = new CObject2D;	//メモリの動的確保
+	pObject2D = new CObject2D;	//メモリの動的確保
 
-	pObject->Init();	//初期化
+	pObject2D->Init("data/TEXTURE/slack_icon.png");	//初期化
 
-	return pObject;	//動的確保したものを返す
+	return pObject2D;	//動的確保したものを返す
 }
 
 //================================================
@@ -74,23 +75,19 @@ CObject2D::~CObject2D()
 //================================================
 //初期化
 //================================================
-HRESULT CObject2D::Init()
+HRESULT CObject2D::Init(const char* filePass)
 {
 	//デバイスの取得
 	LPDIRECT3DDEVICE9 pDevice = CApplication::GetRenderer()->GetDevice();
 
 	//テクスチャの読み込み
 	D3DXCreateTextureFromFile(pDevice,
-								"data/TEXTURE/slack_icon.png",
+								filePass,
 								&m_pTexture);
 
-	//位置
-	m_pos = D3DXVECTOR3((CRenderer::SCREEN_WIDTH * 0.5f), (CRenderer::SCREEN_HEIGHT * 0.5f), 0.0f);
-
-	//向き
+	//位置、向き、サイズ
+	m_pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	m_rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-
-	//サイズ
 	m_fSize = POLYGON_SIZE;
 
 	//頂点バッファの生成
@@ -161,7 +158,14 @@ void CObject2D::Uninit()
 //================================================
 void CObject2D::Update()
 {
-	m_rot.z -= ROTATION_SPEED;	//回転
+	CInputKeyboard input;
+	
+	if (input.GetPress(DIK_SPACE))
+	{
+		m_rot.z -= ROTATION_SPEED;
+	}
+
+	//m_rot.z -= ROTATION_SPEED;	//回転
 	m_fTimer++;					//カウントアップ
 
 	/* 角度の正規化 */

@@ -36,7 +36,7 @@ public: /* コンストラクタ・デストラクタ */
 	virtual ~CObject();
 
 public: /* 純粋仮想関数 */
-	virtual HRESULT Init() = 0;	//初期化
+	virtual HRESULT Init(const char* filePass) = 0;	//初期化
 	virtual void Uninit() = 0;	//終了
 	virtual void Update() = 0;	//更新
 	virtual void Draw() = 0;	//描画

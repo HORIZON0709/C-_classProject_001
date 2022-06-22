@@ -13,8 +13,9 @@
 //***************************
 //静的メンバ変数
 //***************************
-CRenderer* CApplication::m_pRenderer = nullptr;				//レンダラー
-CInputKeyboard* CApplication::m_pInputKeyboard = nullptr;	//キーボード
+CRenderer* CApplication::m_pRenderer = nullptr;		//レンダラー
+CInput* CApplication::m_pInputKeyboard = nullptr;	//キーボード
+CPlayer* CApplication::m_pPlayer = nullptr;			//プレイヤー
 
 //================================================
 //レンダラー情報を取得
@@ -27,9 +28,17 @@ CRenderer* CApplication::GetRenderer()
 //================================================
 //キーボード情報を取得
 //================================================
-CInputKeyboard* CApplication::GetInputKeyboard()
+CInput* CApplication::GetInputKeyboard()
 {
 	return m_pInputKeyboard;
+}
+
+//================================================
+//プレイヤー情報を取得
+//================================================
+CPlayer* CApplication::GetPlayer()
+{
+	return m_pPlayer;
 }
 
 //================================================
@@ -51,10 +60,19 @@ CApplication::~CApplication()
 //================================================
 HRESULT CApplication::Init(HWND hWnd, BOOL bWindow, HINSTANCE hInstance)
 {
+	/* キーボード */
+
 	if (m_pInputKeyboard == nullptr)
 	{//NULLチェック
 		m_pInputKeyboard = new CInputKeyboard;	//メモリの動的確保
 	}
+
+	if (FAILED(m_pInputKeyboard->Init(hInstance, hWnd)))
+	{//初期化処理が失敗した場合
+		return E_FAIL;
+	}
+
+	/* レンダラー */
 
 	if (m_pRenderer == nullptr)
 	{//NULLチェック
@@ -70,6 +88,10 @@ HRESULT CApplication::Init(HWND hWnd, BOOL bWindow, HINSTANCE hInstance)
 
 	CObject2D::CreateAll();	//全ての生成
 
+	/* プレイヤー */
+
+	m_pPlayer = CPlayer::Create();	//生成
+
 	return S_OK;
 }
 
@@ -78,6 +100,8 @@ HRESULT CApplication::Init(HWND hWnd, BOOL bWindow, HINSTANCE hInstance)
 //================================================
 void CApplication::Uninit()
 {
+	/* キーボード */
+
 	if (m_pInputKeyboard != nullptr)
 	{//NULLチェック
 		m_pInputKeyboard->Uninit();	//終了処理
@@ -85,7 +109,20 @@ void CApplication::Uninit()
 		m_pInputKeyboard = nullptr;	//nullptrにする
 	}
 
+	/* プレイヤー */
+
+	if (m_pPlayer != nullptr)
+	{//NULLチェック
+		m_pPlayer->Uninit();	//終了処理
+		delete m_pPlayer;		//メモリの解放
+		m_pPlayer = nullptr;	//nullptrにする
+	}
+
+	/* オブジェクト */
+
 	CObject2D::ReleaseAll();	//全ての解放
+
+	/* レンダラー */
 
 	if (m_pRenderer != nullptr)
 	{//NULLチェック
@@ -101,11 +138,19 @@ void CApplication::Uninit()
 void CApplication::Update()
 {
 	if (m_pInputKeyboard != nullptr)
-	{
+	{//NULLチェック
 		m_pInputKeyboard->Update();	//キーボード
 	}
 
-	m_pRenderer->Update();	//レンダラー
+	if (m_pRenderer != nullptr)
+	{//NULLチェック
+		m_pRenderer->Update();	//レンダラー
+	}
+
+	if (m_pPlayer != nullptr)
+	{//NULLチェック
+		m_pPlayer->Update();	//プレイヤー
+	}
 }
 
 //================================================
@@ -113,5 +158,13 @@ void CApplication::Update()
 //================================================
 void CApplication::Draw()
 {
-	m_pRenderer->Draw();	//レンダラー
+	if (m_pRenderer != nullptr)
+	{//NULLチェック
+		m_pRenderer->Draw();	//レンダラー
+	}
+
+	if (m_pPlayer != nullptr)
+	{//NULLチェック
+		m_pPlayer->Draw();	//プレイヤー
+	}
 }

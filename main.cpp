@@ -86,8 +86,10 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPSTR /*lpC
 		pApplication = new CApplication;	//ƒƒ‚ƒŠ‚Ì“®“IŠm•Û
 	}
 
-	//‰Šú‰»ˆ—
-	pApplication->Init(hWnd, TRUE, hInstance);
+	if (FAILED(pApplication->Init(hWnd, TRUE, hInstance)))
+	{//‰Šú‰»ˆ—‚ª¸”s‚µ‚½ê‡
+		return E_FAIL;
+	}
 
 	//•ª‰ğ”\‚ğİ’è
 	timeBeginPeriod(1);

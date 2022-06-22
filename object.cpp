@@ -38,9 +38,6 @@ void CObject::CreateAll()
 		//ˆÊ’u‚ÌÝ’è
 		m_apObject[i]->SetPos(D3DXVECTOR3(fPosX, fPosY, 0));
 	}
-
-	//‰ð•ú
-	//m_apObject[1]->Release();
 }
 
 //================================================

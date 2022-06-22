@@ -103,7 +103,7 @@ void CInputKeyboard::Update()
 		return;
 	}
 	
-	m_pDevice->Acquire();			//キーボードへのアクセス権を獲得
+	m_pDevice->Acquire();	//キーボードへのアクセス権を獲得
 }
 
 //================================================
