@@ -156,6 +156,7 @@
   <ItemGroup>
     <ClCompile Include="application.cpp" />
     <ClCompile Include="bullet.cpp" />
+    <ClCompile Include="explosion.cpp" />
     <ClCompile Include="input.cpp" />
     <ClCompile Include="inputKeyboard.cpp" />
     <ClCompile Include="main.cpp" />
@@ -168,6 +169,7 @@
   <ItemGroup>
     <ClInclude Include="application.h" />
     <ClInclude Include="bullet.h" />
+    <ClInclude Include="explosion.h" />
     <ClInclude Include="input.h" />
     <ClInclude Include="inputKeyboard.h" />
     <ClInclude Include="main.h" />

@@ -23,6 +23,7 @@ public: /* ’è‹` */
 		TEXTURE_•S‹S‚ ‚â‚ß_8 = 0,	// ‰¼‰æ‘œ1
 		TEXTURE_slack_icon,			// ‰¼‰æ‘œ2
 		TEXTURE_circle_sakura2,		// ‰¼‰æ‘œ3
+		TEXTURE_explosion000,		// ‰¼‰æ‘œ4
 		TEXTURE_MAX,
 		TEXTURE_NONE,	// Žg—p‚µ‚È‚¢
 	};

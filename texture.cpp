@@ -22,6 +22,7 @@ const char* CTexture::s_FileName[] =
 	"data/TEXTURE/•S‹S‚ ‚â‚ß_8.jpg",	// ‰¼‰æ‘œ1
 	"data/TEXTURE/slack_icon.png",		// ‰¼‰æ‘œ2
 	"data/TEXTURE/circle_sakura2.png",	// ‰¼‰æ‘œ3
+	"data/TEXTURE/explosion000.png",	// ‰¼‰æ‘œ4
 };
 
 static_assert(sizeof(CTexture::s_FileName) / sizeof(CTexture::s_FileName[0]) == CTexture::TEXTURE_MAX, "aho");

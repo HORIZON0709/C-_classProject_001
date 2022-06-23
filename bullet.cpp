@@ -8,8 +8,8 @@
 //インクルード
 //***************************
 #include "bullet.h"
-#include "application.h"
 #include "renderer.h"
+#include "explosion.h"
 
 #include <assert.h>
 
@@ -21,7 +21,7 @@ const float CBullet::BULLET_SIZE = 50.0f;	//サイズ
 //================================================
 //生成
 //================================================
-CBullet* CBullet::Create()
+CBullet* CBullet::Create(D3DXVECTOR3 pos)
 {
 	CBullet* pBullet = nullptr;	//ポインタ
 
@@ -35,6 +35,8 @@ CBullet* CBullet::Create()
 	pBullet = new CBullet;	//メモリの動的確保
 
 	pBullet->Init();	//初期化
+
+	pBullet->SetPos(pos, BULLET_SIZE);	//位置を設定
 
 	return pBullet;	//動的確保したものを返す
 }
@@ -64,6 +66,9 @@ HRESULT CBullet::Init()
 	D3DXVECTOR3 pos = D3DXVECTOR3((CRenderer::SCREEN_WIDTH * 0.8f), (CRenderer::SCREEN_HEIGHT * 0.5f), 0.0f);
 	CObject2D::SetPos(pos, BULLET_SIZE);
 
+	//移動量を設定
+	m_move = D3DXVECTOR3(0.0f, 10.0f, 0.0f);
+
 	// テクスチャの設定
 	CObject2D::SetTexture(CTexture::TEXTURE_circle_sakura2);
 
@@ -87,7 +92,7 @@ void CBullet::Update()
 
 	D3DXVECTOR3 pos = CObject2D::GetPos();	//位置設定用
 
-	pos.y -= 10.0f;	//位置を更新
+	pos.y -= m_move.y;	//位置を更新
 
 	CObject2D::SetPos(pos, BULLET_SIZE);	//更新した位置を設定
 
@@ -95,6 +100,10 @@ void CBullet::Update()
 		(pos.y < 0) || (pos.y > CRenderer::SCREEN_HEIGHT))
 	{//画面外に出たら
 		Release();	//解放
+
+		CExplosion* pExplosion = CExplosion::Create(pos);	//爆発の生成
+
+		pExplosion->Update();	//爆発の更新
 	}
 }
 

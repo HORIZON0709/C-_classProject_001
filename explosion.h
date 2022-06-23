@@ -1,11 +1,11 @@
 //================================================
 //
-//制作実践基礎[bullet.h]
+//制作実践基礎[explosion.h]
 //Author:Kishimoto Eiji
 //
 //================================================
-#ifndef _BULLET_H_
-#define _BULLET_H_
+#ifndef _EXPLOSION_H_
+#define _EXPLOSION_H_
 
 //***************************
 //インクルード
@@ -13,19 +13,20 @@
 #include "object2D.h"
 
 //***************************
-//弾クラスの定義
+//爆発クラスの定義
 //***************************
-class CBullet : public CObject2D
+class CExplosion : public CObject2D
 {/* CObject2Dの派生クラス */
 private: /* 定数の定義 */
-	static const float BULLET_SIZE;	//サイズ
+	static const float EXPLOSION_SIZE;	//サイズ
+	static const int DIVIDE_TEX_U = 8;	//テクスチャの分割数( U方向 )
 
 public: /* 静的メンバ関数 */
-	static CBullet* Create(D3DXVECTOR3 pos);	//生成
+	static CExplosion* Create(D3DXVECTOR3 pos);	//生成
 
 public: /* コンストラクタ・デストラクタ */
-	CBullet();
-	~CBullet() override;
+	CExplosion();
+	~CExplosion() override;
 
 public: /* メンバ関数 */
 	HRESULT Init() override;	//初期化
@@ -34,6 +35,8 @@ public: /* メンバ関数 */
 	void Draw() override;		//描画
 
 private: /* メンバ変数 */
-	D3DXVECTOR3 m_move;	//移動量
+	int m_nCntAnim;
+	int m_nPtnAnim;
 };
+
 #endif

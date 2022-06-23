@@ -1,72 +1,72 @@
 //================================================
 //
-//制作実践基礎[player.cpp]
+//制作実践基礎[explosion.cpp]
 //Author:Kishimoto Eiji
 //
 //================================================
 //***************************
 //インクルード
 //***************************
-#include "player.h"
+#include "explosion.h"
 #include "renderer.h"
-#include "input.h"
-#include "bullet.h"
 
 #include <assert.h>
 
 //***************************
 //定数の定義
 //***************************
-const float CPlayer::PLAYER_SIZE = 100.0f;	//サイズ
+const float CExplosion::EXPLOSION_SIZE = 30.0f;	//サイズ
 
 //================================================
 //生成
 //================================================
-CPlayer* CPlayer::Create()
+CExplosion* CExplosion::Create(D3DXVECTOR3 pos)
 {
-	CPlayer* pPlayer = nullptr;	//ポインタ
+	CExplosion* pExplosion = nullptr;	//ポインタ
 
-	if (pPlayer != nullptr)
+	if (pExplosion != nullptr)
 	{//NULLチェック
 		assert(false);
 	}
 
 	/* nullptrの場合 */
 
-	pPlayer = new CPlayer;	//メモリの動的確保
+	pExplosion = new CExplosion;	//メモリの動的確保
 
-	pPlayer->Init();	//初期化
+	pExplosion->Init();	//初期化
 
-	return pPlayer;	//動的確保したものを返す
+	pExplosion->SetPos(pos, EXPLOSION_SIZE);	//位置を設定
+
+	return pExplosion;	//動的確保したものを返す
 }
 
 //================================================
 //コンストラクタ
 //================================================
-CPlayer::CPlayer()
+CExplosion::CExplosion()
 {
 }
 
 //================================================
 //デストラクタ
 //================================================
-CPlayer::~CPlayer()
+CExplosion::~CExplosion()
 {
 }
 
 //================================================
 //初期化
 //================================================
-HRESULT CPlayer::Init()
+HRESULT CExplosion::Init()
 {
 	CObject2D::Init();	//親クラス
 
 	//位置を設定
-	D3DXVECTOR3 pos = D3DXVECTOR3((CRenderer::SCREEN_WIDTH * 0.5f), (CRenderer::SCREEN_HEIGHT * 0.5f), 0.0f);
-	CObject2D::SetPos(pos, PLAYER_SIZE);
+	D3DXVECTOR3 pos = D3DXVECTOR3((CRenderer::SCREEN_WIDTH * 0.8f), (CRenderer::SCREEN_HEIGHT * 0.5f), 0.0f);
+	CObject2D::SetPos(pos, EXPLOSION_SIZE);
 
 	// テクスチャの設定
-	CObject2D::SetTexture(CTexture::TEXTURE_百鬼あやめ_8);
+	CObject2D::SetTexture(CTexture::TEXTURE_explosion000);
 
 	return S_OK;
 }
@@ -74,7 +74,7 @@ HRESULT CPlayer::Init()
 //================================================
 //終了
 //================================================
-void CPlayer::Uninit()
+void CExplosion::Uninit()
 {
 	CObject2D::Uninit();	//親クラス
 }
@@ -82,47 +82,28 @@ void CPlayer::Uninit()
 //================================================
 //更新
 //================================================
-void CPlayer::Update()
+void CExplosion::Update()
 {
 	CObject2D::Update();	//親クラス
 
-	CInput* pInput = CInput::GetKey();	//キーボード
-	D3DXVECTOR3 pos = CObject2D::GetPos();		//位置設定用
+	m_nCntAnim++;
 
-	/* 移動 */
+	if (m_nCntAnim % 10 == 0)
+	{//一定間隔
+		//パターン番号を更新する
+		m_nPtnAnim = (m_nPtnAnim + 1) % DIVIDE_TEX_U;
 
-	if (pInput->Press(CInput::STANDARD_KEY::RIGHT))
-	{//右
-		pos.x += 5.0f;
+		//テクスチャ座標の設定
+		CObject2D::SetAnimTexUV(DIVIDE_TEX_U, m_nPtnAnim);
+
+		Release();	//解放
 	}
-	else if (pInput->Press(CInput::STANDARD_KEY::LEFT))
-	{//左
-		pos.x -= 5.0f;
-	}
-
-	if (pInput->Press(CInput::STANDARD_KEY::UP))
-	{//上
-		pos.y -= 5.0f;
-	}
-	else if (pInput->Press(CInput::STANDARD_KEY::DOWN))
-	{//下
-		pos.y += 5.0f;
-	}
-
-	if (pInput->Trigger(CInput::STANDARD_KEY::SHOT))
-	{//発射
-		CBullet* pBullet = CBullet::Create(pos);	//弾の生成
-
-		pBullet->Update();	//弾の更新
-	}
-
-	CObject2D::SetPos(pos, PLAYER_SIZE);	//位置を更新
 }
 
 //================================================
 //描画
 //================================================
-void CPlayer::Draw()
+void CExplosion::Draw()
 {
 	CObject2D::Draw();	//親クラス
 }
