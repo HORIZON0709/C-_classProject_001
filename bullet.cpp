@@ -59,6 +59,9 @@ HRESULT CBullet::Init()
 	D3DXVECTOR3 pos = D3DXVECTOR3((CRenderer::SCREEN_WIDTH * 0.8f), (CRenderer::SCREEN_HEIGHT * 0.5f), 0.0f);
 	CObject2D::SetPos(pos);
 
+	// テクスチャの設定
+	CObject2D::SetTexture(CTexture::TEXTURE_circle_sakura2);
+
 	return S_OK;
 }
 

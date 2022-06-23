@@ -10,6 +10,7 @@
 #include "player.h"
 #include "application.h"
 #include "renderer.h"
+#include "input.h"
 
 #include <assert.h>
 
@@ -80,16 +81,21 @@ void CPlayer::Update()
 {
 	CObject2D::Update();	//親クラス
 
-	//CInputKeyboard input;	//キーボード
-	//
-	//if (input.GetPress(DIK_D))
-	//{//右
-	//	m_pos.x += 50.0f;
-	//}
-	//else if (input.GetPress(DIK_A))
-	//{//左
-	//	m_pos.x -= 50.0f;
-	//}
+	CInput* pInput = CInput::GetKey();	//キーボード
+	D3DXVECTOR3 pos;					//位置設定用
+
+	/* 移動 */
+
+	if (pInput->Press(CInput::STANDARD_KEY::RIGHT))
+	{//右
+		pos.x += 50.0f;
+	}
+	else if (pInput->Press(CInput::STANDARD_KEY::LEFT))
+	{//左
+		pos.x -= 50.0f;
+	}
+
+	CObject2D::SetPos(pos);	//位置を更新
 }
 
 //================================================

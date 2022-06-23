@@ -18,13 +18,6 @@
 //***************************
 const float CObject2D::ROTATION_SPEED = 0.01f;	//回転速度
 const float CObject2D::POLYGON_SIZE = 100.0f;	//サイズ
-const D3DXVECTOR3 CObject2D::POS_VTX[4] =
-{/* 頂点の位置 */
-	D3DXVECTOR3(-1.0f,-1.0f,0.0f),
-	D3DXVECTOR3(+1.0f,-1.0f,0.0f),
-	D3DXVECTOR3(-1.0f,+1.0f,0.0f),
-	D3DXVECTOR3(+1.0f,+1.0f,0.0f),
-};
 
 //================================================
 //生成
@@ -55,8 +48,6 @@ CObject2D::CObject2D() :
 	m_pVtxBuff(nullptr),
 	m_pos(D3DXVECTOR3(0.0f, 0.0f, 0.0f)),
 	m_rot(D3DXVECTOR3(0.0f, 0.0f, 0.0f)), 
-	m_fSize(0.0f),
-	m_fCol(0.0f),
 	m_texture(CTexture::TEXTURE_NONE)
 {
 }
@@ -82,7 +73,6 @@ HRESULT CObject2D::Init()
 	//メンバ変数の初期設定
 	m_pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	m_rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	m_fSize = POLYGON_SIZE;
 	m_texture = CTexture::TEXTURE_NONE;
 
 	//頂点バッファの生成
@@ -100,9 +90,9 @@ HRESULT CObject2D::Init()
 
 	//頂点情報を設定
 	pVtx[0].pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	pVtx[1].pos = D3DXVECTOR3(POLYGON_SIZE, 0.0f, 0.0f);
-	pVtx[2].pos = D3DXVECTOR3(0.0f, POLYGON_SIZE, 0.0f);
-	pVtx[3].pos = D3DXVECTOR3(POLYGON_SIZE, POLYGON_SIZE, 0.0f);
+	pVtx[1].pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	pVtx[2].pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	pVtx[3].pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 
 	//rhwの設定
 	pVtx[0].rhw = 1.0f;
@@ -187,6 +177,22 @@ void CObject2D::Draw()
 void CObject2D::SetPos(const D3DXVECTOR3 &pos)
 {
 	m_pos = pos;
+
+	VERTEX_2D *pVtx;	//頂点情報へのポインタ
+
+	//頂点バッファをロックし、頂点情報へのポインタを取得
+	m_pVtxBuff->Lock(0, 0, (void**)&pVtx, 0);
+
+	float fSizeHalf = (POLYGON_SIZE * 0.5f);	//サイズの半分
+
+	//頂点情報を設定
+	pVtx[0].pos = m_pos + D3DXVECTOR3(-fSizeHalf, -fSizeHalf, 0.0f);
+	pVtx[1].pos = m_pos + D3DXVECTOR3(+fSizeHalf, -fSizeHalf, 0.0f);
+	pVtx[2].pos = m_pos + D3DXVECTOR3(-fSizeHalf, +fSizeHalf, 0.0f);
+	pVtx[3].pos = m_pos + D3DXVECTOR3(+fSizeHalf, +fSizeHalf, 0.0f);
+
+	//頂点バッファをアンロックする
+	m_pVtxBuff->Unlock();
 }
 
 //================================================

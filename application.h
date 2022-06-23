@@ -15,10 +15,11 @@
 //***************************
 //前方宣言
 //***************************
-class CRenderer;
 class CInput;
-class CPlayer;
+class CInputKeyboard;
+class CRenderer;
 class CTexture;
+class CPlayer;
 
 //***************************
 //アプリケーションクラスの定義
@@ -26,10 +27,10 @@ class CTexture;
 class CApplication
 {/* 基本クラス */
 public: /* 静的メンバ関数 */
-	static CRenderer* GetRenderer();	//レンダラー情報を取得
-	static CInput* GetInputKeyboard();	//キーボード情報を取得
-	static CPlayer* GetPlayer();		//プレイヤー情報を取得
-	static CTexture* GetTexture();		//テクスチャ情報を取得
+	static CInputKeyboard* GetInputKeyboard();	//キーボード情報を取得
+	static CRenderer* GetRenderer();			//レンダラー情報を取得
+	static CTexture* GetTexture();				//テクスチャ情報を取得
+	static CPlayer* GetPlayer();				//プレイヤー情報を取得
 
 public: /* コンストラクタ・デストラクタ */
 	CApplication();
@@ -43,10 +44,11 @@ public: /* メンバ関数 */
 	void Draw();	//描画
 
 private: /* 静的メンバ関数 */
+	static CInput* m_pInput;
+	static CInputKeyboard* m_pInputKeyboard;	//キーボードのポインタ
 	static CRenderer* m_pRenderer;		//レンダラーのポインタ
-	static CInput* m_pInputKeyboard;	//キーボードのポインタ
-	static CPlayer* m_pPlayer;			//プレイヤーのポインタ
 	static CTexture* m_pTexture;		//テクスチャのポインタ
+	static CPlayer* m_pPlayer;			//プレイヤーのポインタ
 };
 
 #endif

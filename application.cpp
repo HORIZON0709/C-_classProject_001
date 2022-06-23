@@ -8,19 +8,28 @@
 //インクルード
 //***************************
 #include "application.h"
+#include "input.h"
 #include "renderer.h"
-#include "inputKeyboard.h"
-#include "player.h"
 #include "texture.h"
+#include "player.h"
 #include "object2D.h"
 
 //***************************
 //静的メンバ変数
 //***************************
-CRenderer* CApplication::m_pRenderer = nullptr;		//レンダラー
-CInput* CApplication::m_pInputKeyboard = nullptr;	//キーボード
-CPlayer* CApplication::m_pPlayer = nullptr;			//プレイヤー
-CTexture* CApplication::m_pTexture = nullptr;		//テクスチャ
+CInput* CApplication::m_pInput = nullptr;
+CInputKeyboard* CApplication::m_pInputKeyboard = nullptr;	//キーボード
+CRenderer* CApplication::m_pRenderer = nullptr;				//レンダラー
+CTexture* CApplication::m_pTexture = nullptr;				//テクスチャ
+CPlayer* CApplication::m_pPlayer = nullptr;					//プレイヤー
+
+//================================================
+//キーボード情報を取得
+//================================================
+CInputKeyboard* CApplication::GetInputKeyboard()
+{
+	return m_pInputKeyboard;
+}
 
 //================================================
 //レンダラー情報を取得
@@ -31,11 +40,11 @@ CRenderer* CApplication::GetRenderer()
 }
 
 //================================================
-//キーボード情報を取得
+// テクスチャ情報を取得
 //================================================
-CInput* CApplication::GetInputKeyboard()
+CTexture* CApplication::GetTexture()
 {
-	return m_pInputKeyboard;
+	return m_pTexture;
 }
 
 //================================================
@@ -44,14 +53,6 @@ CInput* CApplication::GetInputKeyboard()
 CPlayer* CApplication::GetPlayer()
 {
 	return m_pPlayer;
-}
-
-//================================================
-// テクスチャ情報を取得
-//================================================
-CTexture* CApplication::GetTexture()
-{
-	return m_pTexture;
 }
 
 //================================================
@@ -73,6 +74,18 @@ CApplication::~CApplication()
 //================================================
 HRESULT CApplication::Init(HWND hWnd, BOOL bWindow, HINSTANCE hInstance)
 {
+	/* インプット */
+
+	if (m_pInput == nullptr)
+	{//NULLチェック
+		m_pInput = new CInput;	//メモリの動的確保
+	}
+
+	if (FAILED(m_pInput->Init(hInstance, hWnd)))
+	{//初期化処理が失敗した場合
+		return E_FAIL;
+	}
+
 	/* キーボード */
 
 	if (m_pInputKeyboard == nullptr)
@@ -121,7 +134,17 @@ void CApplication::Uninit()
 	CObject2D::ReleaseAll();	//全ての解放
 	
 	/* プレイヤー */
+
 	m_pPlayer = nullptr;	//nullptrにする
+
+	/* テクスチャ */
+
+	if (m_pTexture != nullptr)
+	{//NULLチェック
+		m_pTexture->ReleaseAll();	//終了処理
+		delete m_pTexture;			//メモリの解放
+		m_pTexture = nullptr;		//nullptrにする
+	}
 
 	/* キーボード */
 
@@ -130,6 +153,15 @@ void CApplication::Uninit()
 		m_pInputKeyboard->Uninit();	//終了処理
 		delete m_pInputKeyboard;	//メモリの解放
 		m_pInputKeyboard = nullptr;	//nullptrにする
+	}
+
+	/* インプット */
+
+	if (m_pInput != nullptr)
+	{//NULLチェック
+		m_pInput->Uninit();	//終了処理
+		delete m_pInput;	//メモリの解放
+		m_pInput = nullptr;	//nullptrにする
 	}
 
 	/* レンダラー */
@@ -147,6 +179,11 @@ void CApplication::Uninit()
 //================================================
 void CApplication::Update()
 {
+	if (m_pInput != nullptr)
+	{//NULLチェック
+		m_pInput->Update();	//キーボード
+	}
+
 	if (m_pInputKeyboard != nullptr)
 	{//NULLチェック
 		m_pInputKeyboard->Update();	//キーボード
