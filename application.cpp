@@ -78,22 +78,10 @@ HRESULT CApplication::Init(HWND hWnd, BOOL bWindow, HINSTANCE hInstance)
 
 	if (m_pInput == nullptr)
 	{//NULLチェック
-		m_pInput = new CInput;	//メモリの動的確保
+		m_pInput = CInput::Create();	//メモリの動的確保
 	}
 
 	if (FAILED(m_pInput->Init(hInstance, hWnd)))
-	{//初期化処理が失敗した場合
-		return E_FAIL;
-	}
-
-	/* キーボード */
-
-	if (m_pInputKeyboard == nullptr)
-	{//NULLチェック
-		m_pInputKeyboard = new CInputKeyboard;	//メモリの動的確保
-	}
-
-	if (FAILED(m_pInputKeyboard->Init(hInstance, hWnd)))
 	{//初期化処理が失敗した場合
 		return E_FAIL;
 	}
@@ -157,12 +145,7 @@ void CApplication::Uninit()
 
 	/* インプット */
 
-	if (m_pInput != nullptr)
-	{//NULLチェック
-		m_pInput->Uninit();	//終了処理
-		delete m_pInput;	//メモリの解放
-		m_pInput = nullptr;	//nullptrにする
-	}
+	m_pInput->Uninit();	//終了処理
 
 	/* レンダラー */
 

@@ -23,7 +23,7 @@ const DWORD FVF_VERTEX_2D = (D3DFVF_XYZRHW | D3DFVF_DIFFUSE | D3DFVF_TEX1);	//頂
 class CObject
 {/* 基本クラス */
 public: /* 定数の定義 */
-	static const int MAX_POLYGON = 256;	//ポリゴンの最大数
+	static const int MAX_POLYGON = 8;	//ポリゴンの最大数
 
 public: /* 静的メンバ関数 */
 	static void ReleaseAll();	//全ての解放
@@ -40,8 +40,8 @@ public: /* 純粋仮想関数 */
 	virtual void Update() = 0;	//更新
 	virtual void Draw() = 0;	//描画
 public: /* Set,Get系 */
-	virtual void SetPos(const D3DXVECTOR3 &pos) = 0;	//位置を設定
-	virtual D3DXVECTOR3 GetPos() = 0;					//位置を取得
+	virtual void SetPos(const D3DXVECTOR3 &pos,const float &fSize) = 0;	//位置を設定
+	virtual D3DXVECTOR3 GetPos() = 0;									//位置を取得
 
 protected: /* メンバ関数 */
 	void Release();	//解放

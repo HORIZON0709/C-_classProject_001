@@ -29,7 +29,6 @@ public: /* 構造体の定義 */
 
 protected: /* 定数の定義 */
 	static const float ROTATION_SPEED;	//回転スピード
-	static const float POLYGON_SIZE;	//サイズ
 
 public: /* 静的メンバ関数 */
 	static CObject2D* Create();	//生成
@@ -44,8 +43,8 @@ public: /* メンバ関数 */
 	void Update() override;		//更新
 	void Draw() override;		//描画
 public: /* Set,Get系 */
-	void SetPos(const D3DXVECTOR3 &pos) override;	//位置を設定
-	D3DXVECTOR3 GetPos() override;					//位置を取得
+	void SetPos(const D3DXVECTOR3 &pos, const float &fSize) override;	//位置を設定
+	D3DXVECTOR3 GetPos() override;										//位置を取得
 public: /* テクスチャ関連 */
 	void SetTexture(CTexture::TEXTURE texture);		//テクスチャの設定
 

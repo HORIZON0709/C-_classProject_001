@@ -11,8 +11,14 @@
 #include "application.h"
 #include "renderer.h"
 #include "input.h"
+#include "bullet.h"
 
 #include <assert.h>
+
+//***************************
+//定数の定義
+//***************************
+const float CPlayer::PLAYER_SIZE = 100.0f;	//サイズ
 
 //================================================
 //生成
@@ -58,7 +64,7 @@ HRESULT CPlayer::Init()
 
 	//位置を設定
 	D3DXVECTOR3 pos = D3DXVECTOR3((CRenderer::SCREEN_WIDTH * 0.5f), (CRenderer::SCREEN_HEIGHT * 0.5f), 0.0f);
-	CObject2D::SetPos(pos);
+	CObject2D::SetPos(pos, PLAYER_SIZE);
 
 	// テクスチャの設定
 	CObject2D::SetTexture(CTexture::TEXTURE_百鬼あやめ_8);
@@ -82,20 +88,36 @@ void CPlayer::Update()
 	CObject2D::Update();	//親クラス
 
 	CInput* pInput = CInput::GetKey();	//キーボード
-	D3DXVECTOR3 pos;					//位置設定用
+	D3DXVECTOR3 pos = CObject2D::GetPos();		//位置設定用
 
 	/* 移動 */
 
 	if (pInput->Press(CInput::STANDARD_KEY::RIGHT))
 	{//右
-		pos.x += 50.0f;
+		pos.x += 5.0f;
 	}
 	else if (pInput->Press(CInput::STANDARD_KEY::LEFT))
 	{//左
-		pos.x -= 50.0f;
+		pos.x -= 5.0f;
 	}
 
-	CObject2D::SetPos(pos);	//位置を更新
+	if (pInput->Press(CInput::STANDARD_KEY::UP))
+	{//上
+		pos.y -= 5.0f;
+	}
+	else if (pInput->Press(CInput::STANDARD_KEY::DOWN))
+	{//下
+		pos.y += 5.0f;
+	}
+
+	if (pInput->Trigger(CInput::STANDARD_KEY::SHOT))
+	{//発射
+		CBullet* pBullet = CBullet::Create();	//弾の生成
+
+		pBullet->Update();	//弾の更新
+	}
+
+	CObject2D::SetPos(pos, PLAYER_SIZE);	//位置を更新
 }
 
 //================================================

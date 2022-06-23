@@ -43,12 +43,13 @@ public: /* メンバ関数 */
 	void Update();	//更新
 	void Draw();	//描画
 
-private: /* 静的メンバ関数 */
-	static CInput* m_pInput;
+private: /* 静的メンバ変数 */
+	static CInput* m_pInput;					//インプットのポインタ
 	static CInputKeyboard* m_pInputKeyboard;	//キーボードのポインタ
-	static CRenderer* m_pRenderer;		//レンダラーのポインタ
-	static CTexture* m_pTexture;		//テクスチャのポインタ
-	static CPlayer* m_pPlayer;			//プレイヤーのポインタ
+
+	static CRenderer* m_pRenderer;	//レンダラーのポインタ
+	static CTexture* m_pTexture;	//テクスチャのポインタ
+	static CPlayer* m_pPlayer;		//プレイヤーのポインタ
 };
 
 #endif

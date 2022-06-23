@@ -17,7 +17,6 @@
 //定数の定義
 //***************************
 const float CObject2D::ROTATION_SPEED = 0.01f;	//回転速度
-const float CObject2D::POLYGON_SIZE = 100.0f;	//サイズ
 
 //================================================
 //生成
@@ -174,16 +173,16 @@ void CObject2D::Draw()
 //================================================
 //位置を設定
 //================================================
-void CObject2D::SetPos(const D3DXVECTOR3 &pos)
+void CObject2D::SetPos(const D3DXVECTOR3 &pos, const float &fSize)
 {
-	m_pos = pos;
+	m_pos = pos;	//位置を設定
 
 	VERTEX_2D *pVtx;	//頂点情報へのポインタ
 
 	//頂点バッファをロックし、頂点情報へのポインタを取得
 	m_pVtxBuff->Lock(0, 0, (void**)&pVtx, 0);
 
-	float fSizeHalf = (POLYGON_SIZE * 0.5f);	//サイズの半分
+	float fSizeHalf = (fSize * 0.5f);	//サイズの半分
 
 	//頂点情報を設定
 	pVtx[0].pos = m_pos + D3DXVECTOR3(-fSizeHalf, -fSizeHalf, 0.0f);

@@ -17,6 +17,9 @@
 //***************************
 class CPlayer : public CObject2D
 {/* CObject2Dの派生クラス */
+private: /* 定数の定義 */
+	static const float PLAYER_SIZE;	//サイズ
+
 public: /* 静的メンバ関数 */
 	static CPlayer* Create();	//生成
 
