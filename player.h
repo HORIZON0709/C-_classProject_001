@@ -25,11 +25,10 @@ public: /* コンストラクタ・デストラクタ */
 	~CPlayer() override;
 
 public: /* メンバ関数 */
-	HRESULT Init(const char* filePass) override;	//初期化
-
-	void Uninit() override;	//終了
-	void Update() override;	//更新
-	void Draw() override;	//描画
+	HRESULT Init() override;	//初期化
+	void Uninit() override;		//終了
+	void Update() override;		//更新
+	void Draw() override;		//描画
 };
 
 #endif

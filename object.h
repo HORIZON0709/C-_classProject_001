@@ -10,7 +10,7 @@
 //***************************
 //インクルード
 //***************************
-#include "main.h"
+#include <d3dx9.h>
 
 //***************************
 //定数の定義
@@ -23,7 +23,7 @@ const DWORD FVF_VERTEX_2D = (D3DFVF_XYZRHW | D3DFVF_DIFFUSE | D3DFVF_TEX1);	//頂
 class CObject
 {/* 基本クラス */
 public: /* 定数の定義 */
-	static const int MAX_POLYGON = 8;	//ポリゴンの最大数
+	static const int MAX_POLYGON = 256;	//ポリゴンの最大数
 
 public: /* 静的メンバ関数 */
 	static void ReleaseAll();	//全ての解放
@@ -35,7 +35,7 @@ public: /* コンストラクタ・デストラクタ */
 	virtual ~CObject();
 
 public: /* 純粋仮想関数 */
-	virtual HRESULT Init(const char* filePass) = 0;	//初期化
+	virtual HRESULT Init() = 0;	//初期化
 	virtual void Uninit() = 0;	//終了
 	virtual void Update() = 0;	//更新
 	virtual void Draw() = 0;	//描画

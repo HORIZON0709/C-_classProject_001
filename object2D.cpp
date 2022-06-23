@@ -9,6 +9,7 @@
 //***************************
 #include "object2D.h"
 #include "application.h"
+#include "renderer.h"
 
 #include <assert.h>
 
@@ -41,7 +42,7 @@ CObject2D* CObject2D::Create()
 
 	pObject2D = new CObject2D;	//メモリの動的確保
 
-	pObject2D->Init("data/TEXTURE/slack_icon.png");	//初期化
+	pObject2D->Init();	//初期化
 
 	return pObject2D;	//動的確保したものを返す
 }
@@ -55,7 +56,8 @@ CObject2D::CObject2D() :
 	m_pos(D3DXVECTOR3(0.0f, 0.0f, 0.0f)),
 	m_rot(D3DXVECTOR3(0.0f, 0.0f, 0.0f)), 
 	m_fSize(0.0f),
-	m_fCol(0.0f)
+	m_fCol(0.0f),
+	m_texture(CTexture::TEXTURE_NONE)
 {
 }
 
@@ -72,20 +74,16 @@ CObject2D::~CObject2D()
 //================================================
 //初期化
 //================================================
-HRESULT CObject2D::Init(const char* filePass)
+HRESULT CObject2D::Init()
 {
 	//デバイスの取得
 	LPDIRECT3DDEVICE9 pDevice = CApplication::GetRenderer()->GetDevice();
 
-	//テクスチャの読み込み
-	D3DXCreateTextureFromFile(pDevice,
-								filePass,
-								&m_pTexture);
-
-	//位置、向き、サイズ
+	//メンバ変数の初期設定
 	m_pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	m_rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	m_fSize = POLYGON_SIZE;
+	m_texture = CTexture::TEXTURE_NONE;
 
 	//頂点バッファの生成
 	pDevice->CreateVertexBuffer(sizeof(VERTEX_2D) * 4,
@@ -102,9 +100,9 @@ HRESULT CObject2D::Init(const char* filePass)
 
 	//頂点情報を設定
 	pVtx[0].pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	pVtx[1].pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	pVtx[2].pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	pVtx[3].pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	pVtx[1].pos = D3DXVECTOR3(POLYGON_SIZE, 0.0f, 0.0f);
+	pVtx[2].pos = D3DXVECTOR3(0.0f, POLYGON_SIZE, 0.0f);
+	pVtx[3].pos = D3DXVECTOR3(POLYGON_SIZE, POLYGON_SIZE, 0.0f);
 
 	//rhwの設定
 	pVtx[0].rhw = 1.0f;
@@ -155,64 +153,7 @@ void CObject2D::Uninit()
 //================================================
 void CObject2D::Update()
 {
-	m_rot.z -= ROTATION_SPEED;	//回転
-	m_fTimer++;					//カウントアップ
-
-	/* 角度の正規化 */
-	if (m_rot.z >= D3DX_PI)
-	{// 3.14より大きい
-		m_rot.z -= D3DX_PI * 2.0f;
-	}
-	else if (m_rot.z <= -D3DX_PI)
-	{// -3.14より小さい
-		m_rot.z += D3DX_PI * 2.0f;
-	}
-
-	//サイズの拡大・縮小
-	m_fSize = cosf(m_rot.z);
 	
-	D3DXVECTOR3 addPos[4];	//計算用配列
-	D3DXMATRIX mtx;			//計算用マトリックス
-
-	//マトリックス作成
-	D3DXMatrixIdentity(&mtx);
-
-	//回転行数作成
-	D3DXMatrixRotationYawPitchRoll(&mtx, 0.0f, 0.0f, ((D3DX_PI * 2.0f) / 360.0f) * m_fTimer);
-
-	VERTEX_2D *pVtx;	//頂点情報へのポインタ
-
-	//頂点バッファをロックし、頂点情報へのポインタを取得
-	m_pVtxBuff->Lock(0, 0, (void**)&pVtx, 0);
-
-	//頂点座標の更新
-	for (int i = 0; i < 4; i++)
-	{
-		D3DXVec3TransformCoord(&addPos[i], &POS_VTX[i], &mtx);
-		pVtx[i].pos = m_pos + addPos[i] * (POLYGON_SIZE * m_fSize);	//<-サイズ変更
-	}
-	
-	//頂点バッファをアンロックする
-	m_pVtxBuff->Unlock();
-
-	//VERTEX_2D *pVtx;    //頂点情報へのポインタ
-
-	////頂点バッファをロックし、頂点情報へのポインタを取得
-	//m_pVtxBuff->Lock(0, 0, (void**)&pVtx, 0);
-
-	//float fLeft		= (m_pos.x - m_fSize);
-	//float fRight	= (m_pos.x + m_fSize);
-	//float fTop		= (m_pos.y + m_fSize);
-	//float fBottom	= (m_pos.y - m_fSize);
-
-	////頂点座標の更新
-	//pVtx[0].pos = D3DXVECTOR3(fLeft, fTop, 0.0f);
-	//pVtx[1].pos = D3DXVECTOR3(fRight, fTop, 0.0f);
-	//pVtx[2].pos = D3DXVECTOR3(fLeft, fBottom, 0.0f);
-	//pVtx[3].pos = D3DXVECTOR3(fRight, fBottom, 0.0f);
-
-	////頂点バッファをアンロックする
-	//m_pVtxBuff->Unlock();
 }
 
 //================================================
@@ -229,8 +170,10 @@ void CObject2D::Draw()
 	//頂点フォーマットの設定
 	pDevice->SetFVF(FVF_VERTEX_2D);
 
+	CTexture* pTexture = CApplication::GetTexture();	//テクスチャを取得
+
 	//テクスチャの設定
-	pDevice->SetTexture(0, m_pTexture);
+	pDevice->SetTexture(0, pTexture->GetTexture(m_texture));
 
 	//ポリゴンの描画
 	pDevice->DrawPrimitive(D3DPT_TRIANGLESTRIP,	//プリミティブの種類
@@ -252,4 +195,12 @@ void CObject2D::SetPos(const D3DXVECTOR3 &pos)
 D3DXVECTOR3 CObject2D::GetPos()
 {
 	return m_pos;
+}
+
+//================================================
+// テクスチャの設定
+//================================================
+void CObject2D::SetTexture(CTexture::TEXTURE texture)
+{
+	m_texture = texture;
 }

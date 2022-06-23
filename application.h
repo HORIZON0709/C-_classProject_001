@@ -10,9 +10,15 @@
 //***************************
 //インクルード
 //***************************
-#include "renderer.h"
-#include "inputKeyboard.h"
-#include "player.h"
+#include <d3dx9.h>
+
+//***************************
+//前方宣言
+//***************************
+class CRenderer;
+class CInput;
+class CPlayer;
+class CTexture;
 
 //***************************
 //アプリケーションクラスの定義
@@ -23,6 +29,7 @@ public: /* 静的メンバ関数 */
 	static CRenderer* GetRenderer();	//レンダラー情報を取得
 	static CInput* GetInputKeyboard();	//キーボード情報を取得
 	static CPlayer* GetPlayer();		//プレイヤー情報を取得
+	static CTexture* GetTexture();		//テクスチャ情報を取得
 
 public: /* コンストラクタ・デストラクタ */
 	CApplication();
@@ -39,6 +46,7 @@ private: /* 静的メンバ関数 */
 	static CRenderer* m_pRenderer;		//レンダラーのポインタ
 	static CInput* m_pInputKeyboard;	//キーボードのポインタ
 	static CPlayer* m_pPlayer;			//プレイヤーのポインタ
+	static CTexture* m_pTexture;		//テクスチャのポインタ
 };
 
 #endif

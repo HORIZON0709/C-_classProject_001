@@ -11,6 +11,7 @@
 //インクルード
 //***************************
 #include "object.h"
+#include "texture.h"
 
 //***************************
 //オブジェクトクラスの定義
@@ -39,8 +40,7 @@ public: /* コンストラクタ・デストラクタ */
 	~CObject2D() override;
 
 public: /* メンバ関数 */
-	HRESULT Init(const char* filePass) override;	//初期化
-
+	HRESULT Init() override;	//初期化
 	void Uninit() override;		//終了
 	void Update() override;		//更新
 	void Draw() override;		//描画
@@ -48,11 +48,12 @@ public: /* Set,Get系 */
 	void SetPos(const D3DXVECTOR3 &pos) override;	//位置を設定
 	D3DXVECTOR3 GetPos() override;					//位置を取得
 public: /* テクスチャ関連 */
-	void BindTexture(LPDIRECT3DTEXTURE9 pTexture);	//テクスチャの紐づけ
+	void SetTexture(CTexture::TEXTURE texture);		//テクスチャの設定
 
 private: /* メンバ変数 */
 	LPDIRECT3DTEXTURE9 m_pTexture;		//テクスチャへのポインタ
 	LPDIRECT3DVERTEXBUFFER9 m_pVtxBuff;	//頂点バッファへのポインタ
+	CTexture::TEXTURE m_texture;		//テクスチャの列挙型
 
 	D3DXVECTOR3 m_pos;	//位置
 	D3DXVECTOR3 m_rot;	//向き

@@ -8,6 +8,10 @@
 //インクルード
 //***************************
 #include "application.h"
+#include "renderer.h"
+#include "inputKeyboard.h"
+#include "player.h"
+#include "texture.h"
 #include "object2D.h"
 
 //***************************
@@ -16,6 +20,7 @@
 CRenderer* CApplication::m_pRenderer = nullptr;		//レンダラー
 CInput* CApplication::m_pInputKeyboard = nullptr;	//キーボード
 CPlayer* CApplication::m_pPlayer = nullptr;			//プレイヤー
+CTexture* CApplication::m_pTexture = nullptr;		//テクスチャ
 
 //================================================
 //レンダラー情報を取得
@@ -39,6 +44,14 @@ CInput* CApplication::GetInputKeyboard()
 CPlayer* CApplication::GetPlayer()
 {
 	return m_pPlayer;
+}
+
+//================================================
+// テクスチャ情報を取得
+//================================================
+CTexture* CApplication::GetTexture()
+{
+	return m_pTexture;
 }
 
 //================================================
@@ -82,6 +95,13 @@ HRESULT CApplication::Init(HWND hWnd, BOOL bWindow, HINSTANCE hInstance)
 	if (FAILED(m_pRenderer->Init(hWnd, bWindow)))
 	{//初期化処理が失敗した場合
 		return E_FAIL;
+	}
+
+	/* テクスチャ */
+
+	if (m_pTexture == nullptr)
+	{//NULLチェック
+		m_pTexture = new CTexture;	//メモリの動的確保
 	}
 
 	/* プレイヤー */
@@ -152,9 +172,4 @@ void CApplication::Draw()
 	{//NULLチェック
 		m_pRenderer->Draw();	//レンダラー
 	}
-
-	//if (m_pPlayer != nullptr)
-	//{//NULLチェック
-	//	m_pPlayer->Draw();	//プレイヤー
-	//}
 }

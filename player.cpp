@@ -9,6 +9,7 @@
 //***************************
 #include "player.h"
 #include "application.h"
+#include "renderer.h"
 
 #include <assert.h>
 
@@ -28,7 +29,7 @@ CPlayer* CPlayer::Create()
 
 	pPlayer = new CPlayer;	//メモリの動的確保
 
-	pPlayer->Init("data/TEXTURE/百鬼あやめ_8.jpg");	//初期化
+	pPlayer->Init();	//初期化
 
 	return pPlayer;	//動的確保したものを返す
 }
@@ -50,13 +51,16 @@ CPlayer::~CPlayer()
 //================================================
 //初期化
 //================================================
-HRESULT CPlayer::Init(const char* filePass)
+HRESULT CPlayer::Init()
 {
-	CObject2D::Init(filePass);	//親クラス
+	CObject2D::Init();	//親クラス
 
 	//位置を設定
 	D3DXVECTOR3 pos = D3DXVECTOR3((CRenderer::SCREEN_WIDTH * 0.5f), (CRenderer::SCREEN_HEIGHT * 0.5f), 0.0f);
 	CObject2D::SetPos(pos);
+
+	// テクスチャの設定
+	CObject2D::SetTexture(CTexture::TEXTURE_百鬼あやめ_8);
 
 	return S_OK;
 }
