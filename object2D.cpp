@@ -46,7 +46,8 @@ CObject2D::CObject2D() :
 	m_pTexture(nullptr),
 	m_pVtxBuff(nullptr),
 	m_pos(D3DXVECTOR3(0.0f, 0.0f, 0.0f)),
-	m_rot(D3DXVECTOR3(0.0f, 0.0f, 0.0f)), 
+	m_rot(D3DXVECTOR3(0.0f, 0.0f, 0.0f)),
+	m_fSize(0.0f),
 	m_texture(CTexture::TEXTURE_NONE)
 {
 }
@@ -72,6 +73,7 @@ HRESULT CObject2D::Init()
 	//メンバ変数の初期設定
 	m_pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	m_rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	m_fSize = 0.0f;
 	m_texture = CTexture::TEXTURE_NONE;
 
 	//頂点バッファの生成
@@ -173,7 +175,7 @@ void CObject2D::Draw()
 //================================================
 //位置を設定
 //================================================
-void CObject2D::SetPos(const D3DXVECTOR3 &pos, const float &fSize)
+void CObject2D::SetPos(const D3DXVECTOR3 &pos)
 {
 	m_pos = pos;	//位置を設定
 
@@ -182,7 +184,7 @@ void CObject2D::SetPos(const D3DXVECTOR3 &pos, const float &fSize)
 	//頂点バッファをロックし、頂点情報へのポインタを取得
 	m_pVtxBuff->Lock(0, 0, (void**)&pVtx, 0);
 
-	float fSizeHalf = (fSize * 0.5f);	//サイズの半分
+	float fSizeHalf = (m_fSize * 0.5f);	//サイズの半分
 
 	//頂点情報を設定
 	pVtx[0].pos = m_pos + D3DXVECTOR3(-fSizeHalf, -fSizeHalf, 0.0f);
@@ -213,7 +215,7 @@ void CObject2D::SetTexture(CTexture::TEXTURE texture)
 //================================================
 //テクスチャ座標の設定(アニメーションに対応)
 //================================================
-void CObject2D::SetAnimTexUV(const int &nDivNum, const int &nPtnAnim)
+void CObject2D::SetTexUV(const int &nDivNum, const int &nPtnAnim)
 {
 	VERTEX_2D *pVtx;	//頂点情報へのポインタ
 
@@ -230,4 +232,20 @@ void CObject2D::SetAnimTexUV(const int &nDivNum, const int &nPtnAnim)
 
 	//頂点バッファをアンロックする
 	m_pVtxBuff->Unlock();
+}
+
+//================================================
+//サイズの設定
+//================================================
+void CObject2D::SetSize(const float &fSize)
+{
+	m_fSize = fSize;
+}
+
+//================================================
+//サイズの取得
+//================================================
+float CObject2D::GetSize()
+{
+	return m_fSize;
 }

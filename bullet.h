@@ -27,11 +27,14 @@ public: /* コンストラクタ・デストラクタ */
 	CBullet();
 	~CBullet() override;
 
-public: /* メンバ関数 */
+public: /* オーバーライド関数 */
 	HRESULT Init() override;	//初期化
 	void Uninit() override;		//終了
 	void Update() override;		//更新
 	void Draw() override;		//描画
+	
+public: /* メンバ関数 */
+	void Collision();
 
 private: /* メンバ変数 */
 	D3DXVECTOR3 m_move;	//移動量

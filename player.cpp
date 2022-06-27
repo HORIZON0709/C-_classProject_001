@@ -46,6 +46,8 @@ CPlayer* CPlayer::Create()
 //================================================
 CPlayer::CPlayer()
 {
+	//タイプの設定
+	CObject::SetObjType(CObject::OBJ_TYPE::PLAYER);
 }
 
 //================================================
@@ -62,9 +64,12 @@ HRESULT CPlayer::Init()
 {
 	CObject2D::Init();	//親クラス
 
+	//サイズを設定
+	CObject2D::SetSize(PLAYER_SIZE);
+
 	//位置を設定
 	D3DXVECTOR3 pos = D3DXVECTOR3((CRenderer::SCREEN_WIDTH * 0.5f), (CRenderer::SCREEN_HEIGHT * 0.5f), 0.0f);
-	CObject2D::SetPos(pos, PLAYER_SIZE);
+	CObject2D::SetPos(pos);
 
 	// テクスチャの設定
 	CObject2D::SetTexture(CTexture::TEXTURE_百鬼あやめ_8);
@@ -115,7 +120,7 @@ void CPlayer::Update()
 		CBullet* pBullet = CBullet::Create(pos);	//弾の生成
 	}
 
-	CObject2D::SetPos(pos, PLAYER_SIZE);	//位置を更新
+	CObject2D::SetPos(pos);	//位置を更新
 }
 
 //================================================

@@ -28,7 +28,7 @@ public: /* コンストラクタ・デストラクタ */
 	CPlayer();
 	~CPlayer() override;
 
-public: /* メンバ関数 */
+public: /* オーバーライド関数 */
 	HRESULT Init() override;	//初期化
 	void Uninit() override;		//終了
 	void Update() override;		//更新

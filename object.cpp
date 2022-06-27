@@ -13,7 +13,7 @@
 //***************************
 //静的メンバ変数
 //***************************
-CObject* CObject::m_apObject[MAX_POLYGON] = {};	//ポインタ
+CObject* CObject::m_apObject[MAX_OBJECT] = {};	//ポインタ
 int CObject::m_nNumAll = 0;						//最大数
 
 //================================================
@@ -21,7 +21,7 @@ int CObject::m_nNumAll = 0;						//最大数
 //================================================
 void CObject::ReleaseAll()
 {
-	for (int i = 0; i < MAX_POLYGON; i++)
+	for (int i = 0; i < MAX_OBJECT; i++)
 	{
 		if (m_apObject[i] == nullptr)
 		{//NULLチェック
@@ -39,7 +39,7 @@ void CObject::ReleaseAll()
 //================================================
 void CObject::UpdateAll()
 {
-	for (int i = 0; i < MAX_POLYGON; i++)
+	for (int i = 0; i < MAX_OBJECT; i++)
 	{
 		if (m_apObject[i] == nullptr)
 		{//NULLチェック
@@ -57,7 +57,7 @@ void CObject::UpdateAll()
 //================================================
 void CObject::DrawAll()
 {
-	for (int i = 0; i < MAX_POLYGON; i++)
+	for (int i = 0; i < MAX_OBJECT; i++)
 	{
 		if (m_apObject[i] == nullptr)
 		{//NULLチェック
@@ -75,7 +75,7 @@ void CObject::DrawAll()
 //================================================
 CObject::CObject()
 {
-	for (int i = 0; i < MAX_POLYGON; i++)
+	for (int i = 0; i < MAX_OBJECT; i++)
 	{
 		if (m_apObject[i] != nullptr)
 		{//NULLチェック
@@ -87,6 +87,7 @@ CObject::CObject()
 		m_apObject[i] = this;	//自身のポインタを返す
 
 		m_nID = i;		//自分の番号を設定
+		objType = (CObject::OBJ_TYPE)this->m_nID;
 		m_nNumAll++;	//数を増やす
 		break;
 	}
@@ -97,6 +98,30 @@ CObject::CObject()
 //================================================
 CObject::~CObject()
 {
+}
+
+//================================================
+//オブジェクト情報の取得
+//================================================
+CObject* CObject::GetObjects(int nIdx)
+{
+	return m_apObject[nIdx];
+}
+
+//================================================
+//タイプの設定
+//================================================
+void CObject::SetObjType(const CObject::OBJ_TYPE &type)
+{
+	objType = type;
+}
+
+//================================================
+//タイプの取得
+//================================================
+CObject::OBJ_TYPE CObject::GetObjType()
+{
+	return objType;
 }
 
 //================================================

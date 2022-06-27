@@ -36,7 +36,7 @@ CEnemy* CEnemy::Create()
 	pEnemy->Init();	//初期化
 
 	D3DXVECTOR3 pos = D3DXVECTOR3((CRenderer::SCREEN_WIDTH * 0.5f), (CRenderer::SCREEN_HEIGHT * 0.2f), 0.0f);
-	pEnemy->SetPos(pos, ENEMY_SIZE);	//位置を設定
+	pEnemy->SetPos(pos);	//位置を設定
 
 	return pEnemy;	//動的確保したものを返す
 }
@@ -46,6 +46,8 @@ CEnemy* CEnemy::Create()
 //================================================
 CEnemy::CEnemy()
 {
+	//タイプの設定
+	CObject::SetObjType(CObject::OBJ_TYPE::ENEMY);
 }
 
 //================================================
@@ -61,6 +63,9 @@ CEnemy::~CEnemy()
 HRESULT CEnemy::Init()
 {
 	CObject2D::Init();	//親クラス
+
+	//サイズを設定
+	CObject2D::SetSize(ENEMY_SIZE);
 
 	// テクスチャの設定
 	CObject2D::SetTexture(CTexture::TEXTURE_全部違う);

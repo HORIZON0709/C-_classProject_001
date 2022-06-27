@@ -27,13 +27,10 @@ public: /* コンストラクタ・デストラクタ */
 	CEnemy();
 	~CEnemy() override;
 
-public: /* メンバ関数 */
+public: /* オーバーライド関数 */
 	HRESULT Init() override;	//初期化
 	void Uninit() override;		//終了
 	void Update() override;		//更新
 	void Draw() override;		//描画
-
-private: /* メンバ変数 */
-
 };
 #endif
