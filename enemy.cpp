@@ -20,7 +20,7 @@ const float CEnemy::ENEMY_SIZE = 120.0f;	//サイズ
 //================================================
 //生成
 //================================================
-CEnemy* CEnemy::Create(D3DXVECTOR3 pos)
+CEnemy* CEnemy::Create()
 {
 	CEnemy* pEnemy = nullptr;	//ポインタ
 
@@ -35,7 +35,8 @@ CEnemy* CEnemy::Create(D3DXVECTOR3 pos)
 
 	pEnemy->Init();	//初期化
 
-	//pEnemy->SetPos(pos, ENEMY_SIZE);	//位置を設定
+	D3DXVECTOR3 pos = D3DXVECTOR3((CRenderer::SCREEN_WIDTH * 0.5f), (CRenderer::SCREEN_HEIGHT * 0.2f), 0.0f);
+	pEnemy->SetPos(pos, ENEMY_SIZE);	//位置を設定
 
 	return pEnemy;	//動的確保したものを返す
 }
@@ -60,10 +61,6 @@ CEnemy::~CEnemy()
 HRESULT CEnemy::Init()
 {
 	CObject2D::Init();	//親クラス
-
-	//位置を設定
-	D3DXVECTOR3 pos = D3DXVECTOR3((CRenderer::SCREEN_WIDTH * 0.5f), (CRenderer::SCREEN_HEIGHT * 0.2f), 0.0f);
-	CObject2D::SetPos(pos, ENEMY_SIZE);
 
 	// テクスチャの設定
 	CObject2D::SetTexture(CTexture::TEXTURE_全部違う);

@@ -124,7 +124,7 @@ HRESULT CApplication::Init(HWND hWnd, BOOL bWindow, HINSTANCE hInstance)
 
 	/* ìG */
 
-	m_pEnemy = CEnemy::Create(D3DXVECTOR3(0.0f, 0.0f, 0.0f));	//ê∂ê¨
+	m_pEnemy = CEnemy::Create();	//ê∂ê¨
 
 	return S_OK;
 }

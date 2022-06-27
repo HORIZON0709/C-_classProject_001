@@ -21,7 +21,7 @@ private: /* 定数の定義 */
 	static const float ENEMY_SIZE;	//サイズ
 
 public: /* 静的メンバ関数 */
-	static CEnemy* Create(D3DXVECTOR3 pos);	//生成
+	static CEnemy* Create();	//生成
 
 public: /* コンストラクタ・デストラクタ */
 	CEnemy();
