@@ -18,6 +18,7 @@
 //定数の定義
 //***************************
 const float CPlayer::PLAYER_SIZE = 100.0f;	//サイズ
+const float CPlayer::MOVE_SPEED = 10.0f;	//移動速度
 
 //================================================
 //生成
@@ -86,34 +87,32 @@ void CPlayer::Update()
 {
 	CObject2D::Update();	//親クラス
 
-	CInput* pInput = CInput::GetKey();	//キーボード
-	D3DXVECTOR3 pos = CObject2D::GetPos();		//位置設定用
+	CInput* pInput = CInput::GetKey();		//キーボード情報を取得
+	D3DXVECTOR3 pos = CObject2D::GetPos();	//位置情報を取得
 
 	/* 移動 */
 
 	if (pInput->Press(CInput::STANDARD_KEY::RIGHT))
 	{//右
-		pos.x += 5.0f;
+		pos.x += MOVE_SPEED;
 	}
 	else if (pInput->Press(CInput::STANDARD_KEY::LEFT))
 	{//左
-		pos.x -= 5.0f;
+		pos.x -= MOVE_SPEED;
 	}
 
 	if (pInput->Press(CInput::STANDARD_KEY::UP))
 	{//上
-		pos.y -= 5.0f;
+		pos.y -= MOVE_SPEED;
 	}
 	else if (pInput->Press(CInput::STANDARD_KEY::DOWN))
 	{//下
-		pos.y += 5.0f;
+		pos.y += MOVE_SPEED;
 	}
 
 	if (pInput->Trigger(CInput::STANDARD_KEY::SHOT))
 	{//発射
 		CBullet* pBullet = CBullet::Create(pos);	//弾の生成
-
-		pBullet->Update();	//弾の更新
 	}
 
 	CObject2D::SetPos(pos, PLAYER_SIZE);	//位置を更新

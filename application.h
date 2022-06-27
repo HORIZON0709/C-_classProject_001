@@ -29,9 +29,12 @@ class CApplication
 {/* 基本クラス */
 public: /* 静的メンバ関数 */
 	static CInputKeyboard* GetInputKeyboard();	//キーボード情報を取得
-	static CRenderer* GetRenderer();			//レンダラー情報を取得
-	static CTexture* GetTexture();				//テクスチャ情報を取得
-	static CPlayer* GetPlayer();				//プレイヤー情報を取得
+
+	static CRenderer* GetRenderer();	//レンダラー情報を取得
+	static CTexture* GetTexture();		//テクスチャ情報を取得
+
+	static CPlayer* GetPlayer();	//プレイヤー情報を取得
+	static CEnemy* GetEnemy();		//敵情報を取得
 
 public: /* コンストラクタ・デストラクタ */
 	CApplication();
@@ -50,8 +53,9 @@ private: /* 静的メンバ変数 */
 
 	static CRenderer* m_pRenderer;	//レンダラーのポインタ
 	static CTexture* m_pTexture;	//テクスチャのポインタ
-	static CPlayer* m_pPlayer;		//プレイヤーのポインタ
-	static CEnemy* m_pEnemy;
+
+	static CPlayer* m_pPlayer;	//プレイヤーのポインタ
+	static CEnemy* m_pEnemy;	//敵のポインタ
 };
 
 #endif

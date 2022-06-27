@@ -19,12 +19,14 @@
 //***************************
 //静的メンバ変数
 //***************************
-CInput* CApplication::m_pInput = nullptr;
+CInput* CApplication::m_pInput = nullptr;					//インプット
 CInputKeyboard* CApplication::m_pInputKeyboard = nullptr;	//キーボード
-CRenderer* CApplication::m_pRenderer = nullptr;				//レンダラー
-CTexture* CApplication::m_pTexture = nullptr;				//テクスチャ
-CPlayer* CApplication::m_pPlayer = nullptr;					//プレイヤー
-CEnemy* CApplication::m_pEnemy = nullptr;
+
+CRenderer* CApplication::m_pRenderer = nullptr;	//レンダラー
+CTexture* CApplication::m_pTexture = nullptr;	//テクスチャ
+
+CPlayer* CApplication::m_pPlayer = nullptr;	//プレイヤー
+CEnemy* CApplication::m_pEnemy = nullptr;	//敵
 
 //================================================
 //キーボード情報を取得
@@ -56,6 +58,14 @@ CTexture* CApplication::GetTexture()
 CPlayer* CApplication::GetPlayer()
 {
 	return m_pPlayer;
+}
+
+//================================================
+//敵情報を取得
+//================================================
+CEnemy* CApplication::GetEnemy()
+{
+	return m_pEnemy;
 }
 
 //================================================
@@ -186,16 +196,6 @@ void CApplication::Update()
 	if (m_pRenderer != nullptr)
 	{//NULLチェック
 		m_pRenderer->Update();	//レンダラー
-	}
-
-	if (m_pPlayer != nullptr)
-	{//NULLチェック
-		m_pPlayer->Update();	//プレイヤー
-	}
-
-	if (m_pEnemy != nullptr)
-	{//NULLチェック
-		m_pEnemy->Update();	//敵
 	}
 }
 
