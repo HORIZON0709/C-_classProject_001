@@ -24,6 +24,7 @@ public: /* 定義 */
 		TEXTURE_slack_icon,			// 仮画像2
 		TEXTURE_circle_sakura2,		// 仮画像3
 		TEXTURE_explosion000,		// 仮画像4
+		TEXTURE_全部違う,			// 仮画像5
 		TEXTURE_MAX,
 		TEXTURE_NONE,	// 使用しない
 	};

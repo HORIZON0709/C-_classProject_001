@@ -12,6 +12,8 @@
 #include "renderer.h"
 #include "texture.h"
 #include "player.h"
+#include "enemy.h"
+
 #include "object2D.h"
 
 //***************************
@@ -22,6 +24,7 @@ CInputKeyboard* CApplication::m_pInputKeyboard = nullptr;	//キーボード
 CRenderer* CApplication::m_pRenderer = nullptr;				//レンダラー
 CTexture* CApplication::m_pTexture = nullptr;				//テクスチャ
 CPlayer* CApplication::m_pPlayer = nullptr;					//プレイヤー
+CEnemy* CApplication::m_pEnemy = nullptr;
 
 //================================================
 //キーボード情報を取得
@@ -109,6 +112,10 @@ HRESULT CApplication::Init(HWND hWnd, BOOL bWindow, HINSTANCE hInstance)
 
 	m_pPlayer = CPlayer::Create();	//生成
 
+	/* 敵 */
+
+	m_pEnemy = CEnemy::Create(D3DXVECTOR3(0.0f, 0.0f, 0.0f));	//生成
+
 	return S_OK;
 }
 
@@ -124,6 +131,10 @@ void CApplication::Uninit()
 	/* プレイヤー */
 
 	m_pPlayer = nullptr;	//nullptrにする
+
+	/* 敵 */
+
+	m_pEnemy = nullptr;	//nullptrにする
 
 	/* テクスチャ */
 
@@ -180,6 +191,11 @@ void CApplication::Update()
 	if (m_pPlayer != nullptr)
 	{//NULLチェック
 		m_pPlayer->Update();	//プレイヤー
+	}
+
+	if (m_pEnemy != nullptr)
+	{//NULLチェック
+		m_pEnemy->Update();	//敵
 	}
 }
 

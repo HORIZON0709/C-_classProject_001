@@ -43,7 +43,9 @@ CExplosion* CExplosion::Create(D3DXVECTOR3 pos)
 //================================================
 //コンストラクタ
 //================================================
-CExplosion::CExplosion()
+CExplosion::CExplosion():
+	m_nCntAnim(0),
+	m_nPtnAnim(0)
 {
 }
 
@@ -61,12 +63,11 @@ HRESULT CExplosion::Init()
 {
 	CObject2D::Init();	//親クラス
 
-	//位置を設定
-	D3DXVECTOR3 pos = D3DXVECTOR3((CRenderer::SCREEN_WIDTH * 0.8f), (CRenderer::SCREEN_HEIGHT * 0.5f), 0.0f);
-	CObject2D::SetPos(pos, EXPLOSION_SIZE);
-
 	// テクスチャの設定
 	CObject2D::SetTexture(CTexture::TEXTURE_explosion000);
+
+	//テクスチャ座標の設定
+	CObject2D::SetAnimTexUV(DIVIDE_TEX_U, 0);
 
 	return S_OK;
 }
@@ -86,17 +87,20 @@ void CExplosion::Update()
 {
 	CObject2D::Update();	//親クラス
 
-	m_nCntAnim++;
+	m_nCntAnim++;	//カウントアップ
 
-	if (m_nCntAnim % 10 == 0)
+	if (m_nCntAnim % 5 == 0)
 	{//一定間隔
 		//パターン番号を更新する
 		m_nPtnAnim = (m_nPtnAnim + 1) % DIVIDE_TEX_U;
 
 		//テクスチャ座標の設定
 		CObject2D::SetAnimTexUV(DIVIDE_TEX_U, m_nPtnAnim);
+	}
 
-		Release();	//解放
+	if (m_nPtnAnim == (DIVIDE_TEX_U - 1))
+	{//アニメーションが終わったら
+ 		Release();	//解放
 	}
 }
 

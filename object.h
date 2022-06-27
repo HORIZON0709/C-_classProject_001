@@ -22,6 +22,16 @@ const DWORD FVF_VERTEX_2D = (D3DFVF_XYZRHW | D3DFVF_DIFFUSE | D3DFVF_TEX1);	//頂
 //***************************
 class CObject
 {/* 基本クラス */
+public: /* 列挙型の定義 */
+	enum OBJ_TYPE
+	{/* オブジェクトの種類 */
+		PLAYER = 0,	//プレイヤー
+		ENEMY,		//敵
+		BULLET,		//弾
+		MAX,
+		NONE
+	};
+
 public: /* 定数の定義 */
 	static const int MAX_POLYGON = 128;	//ポリゴンの最大数
 
@@ -51,7 +61,8 @@ private: /* 静的メンバ変数 */
 	static int m_nNumAll;						//最大数
 	
 private: /* メンバ変数 */
-	int m_nID;	//格納先の番号
+	int m_nID;		//格納先の番号
+	OBJ_TYPE type;	//種類
 };
 
 #endif

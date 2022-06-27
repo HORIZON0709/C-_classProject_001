@@ -20,6 +20,7 @@ class CInputKeyboard;
 class CRenderer;
 class CTexture;
 class CPlayer;
+class CEnemy;
 
 //***************************
 //アプリケーションクラスの定義
@@ -50,6 +51,7 @@ private: /* 静的メンバ変数 */
 	static CRenderer* m_pRenderer;	//レンダラーのポインタ
 	static CTexture* m_pTexture;	//テクスチャのポインタ
 	static CPlayer* m_pPlayer;		//プレイヤーのポインタ
+	static CEnemy* m_pEnemy;
 };
 
 #endif
